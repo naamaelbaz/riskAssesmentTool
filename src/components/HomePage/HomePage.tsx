@@ -3,12 +3,12 @@ import Header from "../Header/Header.tsx";
 import "./HomePage.css";
 import Button from "../Button/Button.tsx"
 import homePage from "C:\\Users\\naama\\final-project\\src\\utils\\homepage.jpeg";
-
+import Footer from "../Footer/Footer.tsx";
 const HomePage: React.FC = () =>{
     return(
         <div>
-        <Header></Header>
         <div className="container">
+        <Header></Header>
             <div className="title">
                 Wellcome To RiskAssesML  
                 <div className="sub-title">
@@ -18,23 +18,37 @@ const HomePage: React.FC = () =>{
             <div className="button-container">
                 <div className="button-item">
                     <Button text="Get Started" bgColor="red" color="white-color"/>
-                    <Button text="Learn More" bgColor="white" color="black-color" wBorder="red-border"/>
                 </div>
-
+                <div className="button-item">
+                     <Button text="Learn More" bgColor="white" color="black-color" wBorder="red-border"/>
+                </div>
             </div>
             <div className="three-content-container">
                 <div className="items">
-
+                    <div className="item-title">
+                        Recent Update
+                    </div>
+                    <div className="item-content">
+                            New ML models integrated for better risk analysis - Oct 2023
+                            Enhanced detection algorithms for AML threats - Sep 2023
+                            Partnership with leading cybersecurity firms - Aug 2023
+                    </div>
                 </div>
-                <div className="second">
-                <img src={homePage} alt="Home Page" />
-                </div>
-                <div className="items">
-
-                </div>
+                    <div className="second">
+                        <img src={homePage} alt="Home Page" height={"225px"} width={"250px"} />
+                    </div>
+                    <div className="items">
+                        <div className="item-title">
+                            About Us   
+                        </div>
+                        <div className="item-content">
+                            RiskAssessML is dedicated to providing cutting-edge solutions to mitigate AML threats by leveraging advanced machine learning techniques.
+                        </div>
+                 </div>
             </div>
+            <Footer/>
         </div>
-        <div className="footer"></div>
+        
         </div>
         
     )
