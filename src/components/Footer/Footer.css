@@ -4,11 +4,54 @@ html, body {
 
   }
 
-  .footer-container {
+.footer-container{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    background-color: #F2D1CE;
+    padding: 8px;
+    flex:1
+}
+
+  .content-container{
     display: flex;
     flex-direction: column;
-    justify-content: flex-end;
-    padding: 50px;
-    background-color: #F2D1CE;
+    justify-content: space-around;
+    align-items: flex-start;
   }
 
+  .title{
+    display:flex; 
+    flex-direction: column;
+    justify-content: flex-start;
+    font-family: 'Montserrat';
+    font-size: medium;
+    font-weight: bold;
+  }
+
+  .sub{
+    display: flex;
+    font-family: 'Montserrat';
+    font-weight: lighter;
+    font-size: small;
+    align-items: center;
+    margin: 6px;
+  }
+
+.content{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: baseline;
+    width: -webkit-fill-available;
+}
+
+.content-item{
+    display: flex;
+    align-items: baseline;
+    cursor: pointer;
+}
+
+.link-visit:visited{
+    color: black;
+}

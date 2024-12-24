@@ -8,10 +8,11 @@ html, body {
 
 .container{
     display: flex;
-    justify-content: center;
-    flex-direction: column;    
-}
+    justify-content: space-between;
+    flex-direction: column;
+    min-height: 100vh;
 
+}
 
 
 .title{
@@ -56,6 +57,7 @@ html, body {
     justify-content: space-evenly;
     flex-direction: row;
     align-items: center;
+    margin: 10px;
 }
 
 .items{
@@ -94,4 +96,3 @@ html, body {
 }
 
 
- 

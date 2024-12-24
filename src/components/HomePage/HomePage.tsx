@@ -6,9 +6,10 @@ import homePage from "C:\\Users\\naama\\final-project\\src\\utils\\homepage.jpeg
 import Footer from "../Footer/Footer.tsx";
 const HomePage: React.FC = () =>{
     return(
-        <div>
+       
         <div className="container">
         <Header></Header>
+            <div></div>
             <div className="title">
                 Wellcome To RiskAssesML  
                 <div className="sub-title">
@@ -49,8 +50,7 @@ const HomePage: React.FC = () =>{
             <Footer/>
         </div>
         
-        </div>
-        
+      
     )
 }
 export default HomePage;
