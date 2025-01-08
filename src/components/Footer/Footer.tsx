@@ -16,6 +16,10 @@ const Footer: React.FC = () =>{
                 <div className="content">
                     <div className="sub">
                         Email: elbazna@post.bgu.ac.il
+                        <br/>
+                        Email: ofirhor@post.bgu.ac.il
+                        <br/>
+                        Email: alklai@post.bgu.ac.il
                     </div>
                 </div>
             </div>

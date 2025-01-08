@@ -43,7 +43,7 @@ const HomePage: React.FC = () =>{
                             About Us   
                         </div>
                         <div className="item-content">
-                            RiskAssessML is dedicated to providing cutting-edge solutions to mitigate AML threats by leveraging advanced machine learning techniques.
+                        We provide a user-friendly platform for assessing and mitigating adversarial threats in machine learning models. Combining research-driven insights with tailored risk assessments, we help secure AI systems against emerging vulnerabilities.
                         </div>
                  </div>
             </div>
