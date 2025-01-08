@@ -23,3 +23,7 @@
     font-weight: bold;
     align-items: flex-end;
 }
+
+.security-icon{
+    cursor: pointer;
+}
