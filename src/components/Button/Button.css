@@ -23,7 +23,38 @@
 .black-color{
     color: black;;
 }
+
+.submit-color{
+  background-color:#FFDCAA;
+}
+
+.clear-color{
+  background-color: #EE3825;
+}
 .button.red-border {
     border: 2px solid transparent;
     border-color: red;
+  }
+
+  .text-icon{
+    display: flex; 
+    justify-content: space-around;
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .button-text{
+    display: flex;
+    border-radius: 2px;
+    font-family: 'Montserrat';
+    font-weight: bold;
+    margin-right: 6px; 
+  }
+  
+  .button-icon {
+    display: inline-flex;
+    align-items: end;
+    width: 5px; /* Define a consistent width */
+    height: 5px; /* Define a consistent height */
+    rotate: -30deg; 
   }
