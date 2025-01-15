@@ -29,10 +29,10 @@ const FormPage = () =>{
 
                 <div className="button-container">
                     <div className="submit-clear-buttons">
-                        <Button text="Submit Form" bgColor="submit-color" color="black-color" onClick={handleSubmit} icon={SendRoundedIcon} ></Button>
+                        <Button text="Submit Form" bgColor="submit-color" color="black-color" onClick={handleSubmit} Icon={SendRoundedIcon} ></Button>
                     </div>
                      <div className="submit-clear-buttons">
-                        <Button text="Clear Form" bgColor="clear-color" color="black-color" onClick={handleClear} icon={CancelScheduleSendRoundedIcon}></Button>
+                        <Button text="Clear Form" bgColor="clear-color" color="black-color" onClick={handleClear} Icon={CancelScheduleSendRoundedIcon}></Button>
                     </div>
                 </div>
 
