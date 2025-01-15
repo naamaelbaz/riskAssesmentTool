@@ -3,6 +3,7 @@ html, body {
     right: 0;
     margin: 0;
     padding: 0;
+ 
   }
 
 
@@ -11,6 +12,7 @@ html, body {
     justify-content: space-between;
     flex-direction: column;
     min-height: 100vh;
+    
 
 }
 
@@ -51,3 +53,30 @@ html, body {
     margin: 10px; 
 }
 
+.header{
+    display: flex;
+    border-radius: 20px;
+
+    background-color: lightgrey;
+    justify-content: center;
+    justify-content: space-around;
+}
+
+.header-container{
+    display: flex; 
+    flex-direction: row;
+  
+    align-items: center;
+  
+
+}
+
+.header-item{
+    display: flex;
+    align-items: center;
+    color: black;
+    font-family: 'Montserrat';
+    font-size: small;
+    font-weight: bold;
+    margin: 10px;   
+}
