@@ -1,0 +1,26 @@
+.quetion-containe{
+    display: flex;
+    justify-content: space-evenly;
+    flex-direction: column;
+    flex: 1;
+    max-width: 20%;
+    padding: 20px;
+    background-color:#ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.62);
+
+
+}
+
+.nav-container{
+    display: flex;
+    border-radius: 20px;
+    padding: 8px;
+    background-color: lightgrey;
+    justify-content: center;
+    justify-content: space-around;
+}
+
+.arrow{
+    cursor: pointer;
+}

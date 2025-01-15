@@ -3,6 +3,7 @@ import Header from "../Header/Header.tsx";
 import Button from "../Button/Button.tsx";
 import SendRoundedIcon from '@mui/icons-material/SendRounded';
 import CancelScheduleSendRoundedIcon from '@mui/icons-material/CancelScheduleSendRounded';
+import MultiStepForm from '../MultiStepForm/MultiStepForm.tsx'
 import './FormPage.css'
 const FormPage = () =>{
     const handleSubmit = () => {
@@ -21,12 +22,17 @@ const FormPage = () =>{
                     <div className="sub-title">Fill in the correct & accurate informtion of your model for best solution</div>
                 </div>
 
-                <div className="form-container">
-
-
+                <div className="header">
+                
+                        <div className="header-item">
+                            Domain
+                        </div>
+                    
 
                 </div>
 
+                    <MultiStepForm></MultiStepForm>
+            
                 <div className="button-container">
                     <div className="submit-clear-buttons">
                         <Button text="Submit Form" bgColor="submit-color" color="black-color" onClick={handleSubmit} Icon={SendRoundedIcon} ></Button>
