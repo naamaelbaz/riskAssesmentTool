@@ -5,7 +5,15 @@ import SendRoundedIcon from '@mui/icons-material/SendRounded';
 import CancelScheduleSendRoundedIcon from '@mui/icons-material/CancelScheduleSendRounded';
 import MultiStepForm from '../MultiStepForm/MultiStepForm.tsx'
 import './FormPage.css'
-const FormPage = () =>{
+import { useState } from "react";
+import DropDowm from "../DropDown/DropDown.tsx";
+import FormHeader from '../FormHeader/FormHeader.tsx'
+export const FormPage = () =>{
+    const [selectedDomain, setSelectedDomain] = useState<string>("Impact");
+     interface Option{
+        id: number; 
+        value: string; 
+    }
     const handleSubmit = () => {
         console.log("Submit fetch");
     }; 
@@ -13,6 +21,26 @@ const FormPage = () =>{
     const handleClear = () => {
         console.log("Clear form");
     }; 
+
+    const impactOpt: Option[] = [
+        { id:1, value: "Very High"},
+        { id:2, value: "High" },
+        { id:3, value: "Meduim Impact" },
+        { id:4, value: "Low" },
+        { id:4, value: "Very Low" }
+      ];
+
+      const domain: Option[]=[
+        {id:1, value:"Impact"},
+        {id:2, value: "Capabilty"},
+        {id:3, value: "Model Type & Risk"}
+      ]
+    
+      const handleDomainChange = (value: string) => {
+        console.log("Selected Domain:", value); // You can use this value for further logic
+        setSelectedDomain(value);
+      };
+
     return (
         <>
             <div className="container">
@@ -24,14 +52,14 @@ const FormPage = () =>{
 
                 <div className="header">
                 
-                        <div className="header-item">
-                            Domain
-                        </div>
-                    
+                <div className="header-item">
+                     <DropDowm options={domain} onSelect={handleDomainChange} title={"Domain"}/>
+                 </div>
 
                 </div>
 
-                    <MultiStepForm></MultiStepForm>
+                 {selectedDomain && <MultiStepForm domain={selectedDomain}/> }
+
             
                 <div className="button-container">
                     <div className="submit-clear-buttons">
