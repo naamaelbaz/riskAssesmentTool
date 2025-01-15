@@ -23,6 +23,14 @@
 .black-color{
     color: black;;
 }
+
+.submit-color{
+  background-color:#FFDCAA;
+}
+
+.clear-color{
+  background-color: #EE3825;
+}
 .button.red-border {
     border: 2px solid transparent;
     border-color: red;

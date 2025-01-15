@@ -17,7 +17,6 @@ const HomePage: React.FC = () =>{
        
         <div className="container">
         <Header></Header>
-            <div></div>
             <div className="title">
                 Wellcome To RiskAssesML  
                 <div className="sub-title">
