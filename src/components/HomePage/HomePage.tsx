@@ -2,7 +2,7 @@ import React from "react";
 import Header from "../Header/Header.tsx";
 import "./HomePage.css";
 import Button from "../Button/Button.tsx"
-import homePage from "C:\\Users\\naama\\final-project\\src\\utils\\homepage.jpeg";
+import homePage from "../../utils/homepage.jpeg";
 import Footer from "../Footer/Footer.tsx";
 import { useNavigate } from 'react-router-dom';
 const HomePage: React.FC = () =>{
