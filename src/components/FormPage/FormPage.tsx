@@ -27,7 +27,7 @@ export const FormPage = () =>{
         { id:2, value: "High" },
         { id:3, value: "Meduim Impact" },
         { id:4, value: "Low" },
-        { id:4, value: "Very Low" }
+        { id:5, value: "Very Low" }
       ];
 
       const domain: Option[]=[
@@ -46,7 +46,7 @@ export const FormPage = () =>{
             <div className="container">
                 <Header/>
                 <div className="title">
-                    AML modle From
+                    AML model Form
                     <div className="sub-title">Fill in the correct & accurate informtion of your model for best solution</div>
                 </div>
 
