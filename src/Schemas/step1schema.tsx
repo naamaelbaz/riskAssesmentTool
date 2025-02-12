@@ -1,6 +1,11 @@
 export interface Option{
   id:number;
-  value:string[]; 
+  value:string
+}
+
+export interface OptionQ{
+  id:number;
+  value:Option[]; 
 }
 
 export interface QuestionStorage{
@@ -11,242 +16,152 @@ export interface QuestionStorage{
   optId:number;  
 }
 
-export const options: Option[] =[
+export const options: OptionQ[] =[
  
-  { id: 1, value:  [
-    "Very High",
-    "High",
-    "Medium Impact",
-    "Low",
-    "Very Low"
+  { id: 1, value:[
+    {id: 1, value:"Very High"},
+    {id: 2, value:"High"},
+    {id: 3, value:"Medium Impact"},
+    {id: 4, value:"Low"},
+    {id: 5, value:"Very Low"}
   ], },
-  { id: 2, value:   [
-    "Very Easy",
-    "Easy",
-    "Medium",
-    "Hard",
-    "Very Hard",
-    "Not Possible"
+  { id: 2, value:[
+    {id: 1, value:"Very Easy"},
+    {id: 2, value:"Easy"},
+    {id: 3, value:"Medium"},
+    {id: 4, value:"Hard"},
+    {id: 5, value:"Very Hard"},
+    {id:6, value: "Not Possible"}
   ], },
-  { id: 3, value:  [
-    "No manual feature engineering",
-    "Basic manual feature engineering",
-    "Extensive manual feature engineering"
-  ],  },
-  { id: 4, value:  [
-    "None",
-    "Basic",
-    "Extensive"
-  ],  },
-  { id: 5, value:    [
-    "Very Insecure",
-    "Insecure",
-    "Moderately Secure",
-    "Secure",
-    "Very Secure"
-  ],  },
-  { id: 6, value:   [
-    "Always",
-    "Often",
-    "Sometimes",
-    "Rarely",
-    "Very Rarely"
-  ],  },
+  { id: 3, value: [
+    {id: 1, value: "No manual feature engineering"},
+    {id: 2, value: "Basic manual feature engineering"},
+    {id: 3, value: "Extensive manual feature engineering"}
+  ] },
+  { id: 4, value: [
+    {id: 1, value: "None"},
+    {id: 2, value: "Basic"},
+    {id: 3, value: "Extensive"}
+  ] },
+  { id: 5, value: [
+    {id: 1, value: "Very Insecure"},
+    {id: 2, value: "Insecure"},
+    {id: 3, value: "Moderately Secure"},
+    {id: 4, value: "Secure"},
+    {id: 5, value: "Very Secure"}
+  ] },
+  { id: 6, value: [
+    {id: 1, value: "Always"},
+    {id: 2, value: "Often"},
+    {id: 3, value: "Sometimes"},
+    {id: 4, value: "Rarely"},
+    {id: 5, value: "Very Rarely"}
+  ] },
   { id: 7, value: [
-    "Full access to the models flow",
-    "Decision-based",
-    "Score-based",
-    "No feedback"
-  ],  },
+    {id: 1, value: "Full access to the models flow"},
+    {id: 2, value: "Decision-based"},
+    {id: 3, value: "Score-based"},
+    {id: 4, value: "No feedback"}
+  ] },
   { id: 8, value: [
-    "Fine Tuning",
-    "Train From Scratch"
-  ],  },
+    {id: 1, value: "Fine Tuning"},
+    {id: 2, value: "Train From Scratch"}
+  ] },
   { id: 9, value: [
-    "No Evaluation",
-    "Yes, but without A/B testing",
-    "Yes, with A/B testing"
-  ],  },
+    {id: 1, value: "No Evaluation"},
+    {id: 2, value: "Yes, but without A/B testing"},
+    {id: 3, value: "Yes, with A/B testing"}
+  ] },
   { id: 10, value: [
-    "Complete Knowledge",
-    "Partial Knowledge (Raw Data)",
-    "Limited Knowledge (Data Property)",
-    "Little to No Knowledge"
-  ],  },
-  { id: 11, value:  [
-    "Complete Knowledge",
-    "Known architecture",
-    "Hyperparam",
-    "Algorithm",
-    "Task",
-    "Unknown"
-  ],  },
-  { id: 12, value:  [
-    "Deep Learning",
-    "Ensemble",
-    "Decision Trees",
-    "Standard ML (e.g., SVM, k-means,…)"
-  ],  },
-  { id: 13, value:  [
-    "Classification",
-    "Semi supervised",
-    "unsupervised (clustering)",
-    "Regression",
-    "Reinforcement learning",
-    "Object Detection",
-    "LLM"
-  ],  },
-
-  { id: 14, value:   [
-    "Images (computer vision)",
-    "Text (NLP)",
-    "Tabular",
-    "Voice"
-  ],  },
-
-  { id: 15, value:   [
-    "Cyber",
-    "Finance",
-    "Computer Vision",
-    "Speech",
-    "Recommender system",
-    "Network",
-    "NLP (TEXT)"
-  ],  },
-
-  { id: 16, value:    [
-    "No impact at all",
-    "Minimal impact (1%-2%)",
-    "Some impact (up to 5%)",
-    "Moderate impact (5%-10%)",
-    "Extended impact (10%-15%)"
-  ],  },
-  { id: 17, value:  [
-    "Very Relevant",
-    "Relevant",
-    "Somewhat relevant",
-    "Almost not relevant",
-    "Not relevant at all"
-  ],  },
-  { id: 18, value:   [
-    "aishell-1",
-    "AlphaGo Zero",
-    "Amazon",
-    "Baidu Apollo real-world LiDAR data",
-    "Bird&Bicycle",
-    "CASIA-WebFace",
-    "CIFAR",
-    "COCO",
-    "CSTR VCTK Corpus",
-    "Chest X-Ray",
-    "Dermofit",
-    "Dermoscopy",
-    "Fundoscopy",
-    "GNU radio ML dataset RML2016.10a",
-    "Google",
-    "Google",
-    "GTSRB",
-    "HMDB-51",
-    "IMDB",
-    "ILSVRC",
-    "IEEE",
-    "ImageNet",
-    "Kaggle",
-    "Kinetics-400",
-    "LFW",
-    "LISA",
-    "Libri",
-    "LOBSTER centisecond-resolution data",
-    "METR-LA",
-    "MNIST",
-    "MS-COCO",
-    "MR",
-    "MultiMNIST",
-    "NoGo",
-    "NSL-KDD",
-    "OASIS",
-    "PEMS-BAY",
-    "PIPA",
-    "Places365",
-    "Power system",
-    "RML",
-    "Spoken commands",
-    "T1w 3D MRI images",
-    "TALFW",
-    "Tiny-Imagenet",
-    "UCF-101",
-    "VoxCeleb1",
-    "WSJ",
-    "YOHO"
-  ],  },
-  { id: 19, value:   [
-    "12-layer convnet",
-    "Alexnet",
-    "AllConv",
-    "Amazon",
-    "ASR systems",
-    "Att2in",
-    "Baidu Apollo",
-    "BLE IoT devices",
-    "Bottom-up Top-down",
-    "CIFAR",
-    "CNN",
-    "Commercial APIs",
-    "Context-aware model",
-    "DenseNet",
-    "DNN",
-    "DT",
-    "End-to-end deep neural network",
-    "Facebook fastText",
-    "GMM-UBM",
-    "GooglLeNet",
-    "Google",
-    "GraphWaveNet",
-    "Hash",
-    "IBM",
-    "I3D",
-    "ImageNet",
-    "Inc",
-    "Inception",
-    "J48",
-    "Kaldi",
-    "KNN",
-    "LeNet",
-    "Linear classifiers",
-    "Lingvo",
-    "LR",
-    "LSTM",
-    "MCTS",
-    "MFCC",
-    "Microsoft Azure",
-    "Microsoft Cortana",
-    "MLP",
-    "MobileFaceNet",
-    "MobileNet",
-    "MNIST",
-    "NB",
-    "nasnet",
-    "NiN",
-    "NTIMIT",
-    "PDQ",
-    "PLDA",
-    "Policy-Value neural network (PV-NN)",
-    "Random Forest",
-    "ResNet",
-    "RF",
-    "ROBERTa",
-    "RNN-ADV",
-    "SegNet",
-    "SqueezeNet",
-    "SVM",
-    "Talentedsoft",
-    "UNet",
-    "VGG",
-    "vit",
-    "WRN",
-    "X-vector",
-    "YOLO"
-  ],  },   
+    {id: 1, value: "Complete Knowledge"},
+    {id: 2, value: "Partial Knowledge (Raw Data)"},
+    {id: 3, value: "Limited Knowledge (Data Property)"},
+    {id: 4, value: "Little to No Knowledge"}
+  ] },
+  { id: 11, value: [
+    {id: 1, value: "Complete Knowledge"},
+    {id: 2, value: "Known architecture"},
+    {id: 3, value: "Hyperparam"},
+    {id: 4, value: "Algorithm"},
+    {id: 5, value: "Task"},
+    {id: 6, value: "Unknown"}
+  ] },
+  { id: 12, value: [
+    {id: 1, value: "Deep Learning"},
+    {id: 2, value: "Ensemble"},
+    {id: 3, value: "Decision Trees"},
+    {id: 4, value: "Standard ML (e.g., SVM, k-means,…)"}
+  ] },
+  { id: 13, value: [
+    {id: 1, value: "Classification"},
+    {id: 2, value: "Semi supervised"},
+    {id: 3, value: "Unsupervised (clustering)"},
+    {id: 4, value: "Regression"},
+    {id: 5, value: "Reinforcement learning"},
+    {id: 6, value: "Object Detection"},
+    {id: 7, value: "LLM"}
+  ] },
+  { id: 14, value: [
+    {id: 1, value: "Images (computer vision)"},
+    {id: 2, value: "Text (NLP)"},
+    {id: 3, value: "Tabular"},
+    {id: 4, value: "Voice"}
+  ] },
+  { id: 15, value: [
+    {id: 1, value: "Cyber"},
+    {id: 2, value: "Finance"},
+    {id: 3, value: "Computer Vision"},
+    {id: 4, value: "Speech"},
+    {id: 5, value: "Recommender system"},
+    {id: 6, value: "Network"},
+    {id: 7, value: "NLP (TEXT)"}
+  ] },
+  { id: 16, value: [
+    {id: 1, value: "No impact at all"},
+    {id: 2, value: "Minimal impact (1%-2%)"},
+    {id: 3, value: "Some impact (up to 5%)"},
+    {id: 4, value: "Moderate impact (5%-10%)"},
+    {id: 5, value: "Extended impact (10%-15%)"}
+  ] },
+  { id: 17, value: [
+    {id: 1, value: "Very Relevant"},
+    {id: 2, value: "Relevant"},
+    {id: 3, value: "Somewhat relevant"},
+    {id: 4, value: "Almost not relevant"},
+    {id: 5, value: "Not relevant at all"}
+  ] },
+  { id: 17, value: [
+    {id: 1, value: "Very Relevant"},
+    {id: 2, value: "Relevant"},
+    {id: 3, value: "Somewhat relevant"},
+    {id: 4, value: "Almost not relevant"},
+    {id: 5, value: "Not relevant at all"}
+  ] },
+  { id: 18, value: [
+    {id: 1, value: "aishell-1"},
+    {id: 2, value: "AlphaGo Zero"},
+    {id: 3, value: "Amazon"},
+    {id: 4, value: "Baidu Apollo real-world LiDAR data"},
+    {id: 5, value: "Bird&Bicycle"},
+    {id: 6, value: "CASIA-WebFace"},
+    {id: 7, value: "CIFAR"},
+    {id: 8, value: "COCO"},
+    {id: 9, value: "CSTR VCTK Corpus"},
+    {id: 10, value: "Chest X-Ray"},
+    {id: 11, value: "Dermofit"},
+    {id: 12, value: "Dermoscopy"},
+    {id: 13, value: "Fundoscopy"},
+    {id: 14, value: "GNU radio ML dataset RML2016.10a"},
+    {id: 15, value: "Google"},
+    {id: 16, value: "GTSRB"},
+    {id: 17, value: "HMDB-51"},
+    {id: 18, value: "IMDB"},
+    {id: 19, value: "ILSVRC"},
+    {id: 20, value: "IEEE"},
+    {id: 21, value: "ImageNet"},
+    {id: 22, value: "Kaggle"},
+    {id: 23, value: "Kinetics-400"}
+  ] }
   ]
   
 

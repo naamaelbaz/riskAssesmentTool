@@ -20,16 +20,16 @@
 }
 
 .card {
-    width: 100%;
-    /* max-width: 400px; */
-    margin: 10px auto;
+  
+    margin: 1px auto;
     padding: 10px;
     border-radius: 10px;
-    background-color: #f9f9f9;
+    background-color:#d7d7d7ae;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     display: flex;
-    flex-direction: row;
-    justify-content: space-around;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 70%;
   }
   
   .card-header {
@@ -39,11 +39,19 @@
   }
   
   .icon {
+    display: flex;
     font-size: 2rem;
     margin-right: 10px;
     cursor: pointer;
+    
   }
-  
+  .innerQ{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+
+  }
   .question-title {
     display: flex;
     align-items: center;
@@ -53,6 +61,8 @@
     font-weight: bold;
     margin: 10px;   
   }
+
+
   
   .answer-input {
     width: 100%;
@@ -69,3 +79,16 @@
     border-color: #007bff;
   }
   
+.answer-container{
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.answer-item {
+  display: flex;
+  justify-content: space-around; /* Ensures buttons are spaced evenly */
+  align-items: center;
+  width: 100%; /* Ensures it spans the entire container */
+  flex-wrap: wrap; /* Allows wrapping if needed */
+}

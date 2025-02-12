@@ -56,8 +56,6 @@ html, body {
 .header{
     display: flex;
     border-radius: 20px;
-
-    background-color: lightgrey;
     justify-content: center;
     justify-content: space-around;
 }

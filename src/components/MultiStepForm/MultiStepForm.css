@@ -16,11 +16,16 @@
     display: flex;
     border-radius: 20px;
     padding: 8px;
-    background-color: lightgrey;
     justify-content: center;
-    justify-content: space-around;
 }
 
 .arrow{
     cursor: pointer;
+    font-size: x-large;
+}
+
+.form-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
