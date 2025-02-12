@@ -4,7 +4,9 @@ import QuestionItem from '../QuetionItem/QuetionItem.tsx';
 import ArrowForwardIosRoundedIcon from '@mui/icons-material/ArrowForwardIosRounded';
 import ArrowBackIosNewRoundedIcon from '@mui/icons-material/ArrowBackIosNewRounded';
 import "./MultiStepForm.css"
-import {QuestionOptions,QuestionStorage, questionsStorage, options} from "../../Schemas/step1schema.tsx"
+import {OptionQ,options,questionsStorage} from "../../Schemas/step1schema.tsx"
+import Button from '../Button/Button.tsx'
+import ArrowCircleRightOutlinedIcon from '@mui/icons-material/ArrowCircleRightOutlined';
 
 const MultiStepForm: React.FC<{ domain: string }>= ({domain='Impact'}) => {
   const { control, handleSubmit } = useForm();
@@ -36,15 +38,16 @@ const MultiStepForm: React.FC<{ domain: string }>= ({domain='Impact'}) => {
     }
   };
   
+
   
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      {questionsChunks[currentStep]?.map((question) => (
+    <form className='form-container' onSubmit={handleSubmit(onSubmit)}>
+      {questionsChunks[currentStep]?.map((question) => 
+      (
         <div key={question.id}>
-          <QuestionItem question={question} control={control} />
-         
+          <QuestionItem question={question} options={options[question.optId]?.value || []} control={control} />
         </div>
-        
+       
       ))}
       <div className='nav-container'>
         {currentStep > 0 && (
@@ -53,7 +56,7 @@ const MultiStepForm: React.FC<{ domain: string }>= ({domain='Impact'}) => {
         {currentStep < questionsChunks.length - 1 ? (
           <ArrowForwardIosRoundedIcon className='arrow' onClick={nextStep}/>
         ) : (
-          <button type="submit">Submit</button>
+          <Button text='Submit Domain' wBorder='submit-border-color' color='black-color'></Button>
         )}
       </div>
     </form>
