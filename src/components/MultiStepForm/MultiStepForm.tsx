@@ -11,8 +11,7 @@ import ArrowCircleRightOutlinedIcon from '@mui/icons-material/ArrowCircleRightOu
 const MultiStepForm: React.FC<{ domain: string }>= ({domain='Impact'}) => {
   const { control, handleSubmit } = useForm();
   const [currentStep, setCurrentStep] = useState(0);
-  console.log(domain)
-   
+ 
   const fillteredDomain = questionsStorage.filter((item) => item.domain === domain);
 
 

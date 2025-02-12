@@ -25,7 +25,6 @@ const DropDowm: React.FC<DropDownProps> = ({ options,onSelect, title }) =>{
         setIsOpen(false);
         onSelect(option.value)
     }
-    console.log("selected", selectedOption)
     return (
         <div className="dropdown-container">
         <div className="dropdown-header" onClick={toggleDropdown}>
