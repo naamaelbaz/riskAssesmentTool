@@ -7,28 +7,22 @@ import MultiStepForm from '../MultiStepForm/MultiStepForm.tsx'
 import './FormPage.css'
 import { useState } from "react";
 import DropDowm from "../DropDown/DropDown.tsx";
-import FormHeader from '../FormHeader/FormHeader.tsx'
 export const FormPage = () =>{
     const [selectedDomain, setSelectedDomain] = useState<string>("Impact");
-     interface Option{
+    const [selectedAllDomainAns, setSelectedAllDomainAns] = useState<{ [domain: string]: { [key: number]: string } }>({});
+    const [selectedAnswers, setSelectedAnswers] = useState<{ [key: number]: string }>({});
+    
+    interface Option{
         id: number; 
         value: string; 
     }
     const handleSubmit = () => {
-        console.log("Submit fetch");
-    }; 
+        console.log("Submit fetch", selectedAllDomainAns);
+    };
 
     const handleClear = () => {
         console.log("Clear form");
     }; 
-
-    const impactOpt: Option[] = [
-        { id:1, value: "Very High"},
-        { id:2, value: "High" },
-        { id:3, value: "Meduim Impact" },
-        { id:4, value: "Low" },
-        { id:5, value: "Very Low" }
-      ];
 
       const domain: Option[]=[
         {id:1, value:"Impact"},
@@ -36,10 +30,18 @@ export const FormPage = () =>{
         {id:3, value: "Model Type & Risk"}
       ]
     
-      const handleDomainChange = (value: string) => {
-        console.log("Selected Domain:", value); // You can use this value for further logic
-        setSelectedDomain(value);
-      };
+      const handleDomainChange = (newDomain: string) => {
+        // Save current domain's answers
+        setSelectedAllDomainAns((prev) => ({
+            ...prev,
+            [selectedDomain]: selectedAnswers, 
+        }));
+
+        // Load new domain's answers (or empty object if none)
+        setSelectedAnswers(selectedAllDomainAns[newDomain] || {});
+        
+        setSelectedDomain(newDomain);
+    };
 
     return (
         <>
@@ -58,7 +60,13 @@ export const FormPage = () =>{
 
                 </div>
 
-                 {selectedDomain && <MultiStepForm domain={selectedDomain}/> }
+                 {selectedDomain && <MultiStepForm 
+                    domain={selectedDomain}
+                    selectedAnswers={selectedAnswers}
+                    setSelectedAnswers={setSelectedAnswers}
+                    selectedAllDomainAns={selectedAllDomainAns}  // Pass the object
+                    setSelectedAllDomainAns={setSelectedAllDomainAns}
+                 /> }
 
             
                 <div className="button-container">

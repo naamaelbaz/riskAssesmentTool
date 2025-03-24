@@ -15,18 +15,14 @@ interface Question {
 
 interface QuestionItemProps {
   question: Question;
-  options: Option[]; // Assuming options is an array of strings
-  control: any; // Replace 'any' with the appropriate type from react-hook-form
+  options: Option[];
+  selectedValue: string;
+  onSelect: (questionId: number, value: string) => void;
 }
 
-const QuestionItem: React.FC<QuestionItemProps> = ({ question, options, control }) => {
+const QuestionItem: React.FC<QuestionItemProps> = ({ question, options, selectedValue,onSelect }) => {
 
-  const [selectedVal, setSelectedVal] = useState<string>("");
-  const[clicked,setClicked] = useState<boolean>(false); 
-  const handleValChange = (value: string) => {
-    console.log("Selected Domain:", value); // You can use this value for further logic
-    setSelectedVal(value);
-  };
+ 
 
   return (
     <div className="card">
@@ -48,10 +44,10 @@ const QuestionItem: React.FC<QuestionItemProps> = ({ question, options, control 
                     <Button
                       key={option.id} 
                       text={option.value}
-                      bgColor={selectedVal === option.value ? "green" : "gray"}
+                      bgColor={selectedValue === option.value ? "green" : "gray"}
                       color="white-color"
-                      onClick={() => handleValChange(option.value)}
-                    />
+                      onClick={() => onSelect(question.id, option.value)}
+                      />
                   ))}
                   </div>
             </div>
