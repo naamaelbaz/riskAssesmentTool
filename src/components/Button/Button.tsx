@@ -2,7 +2,7 @@ import React, { ReactElement } from "react";
 import "./Button.css";
 interface ButtonProps{
     text: string,
-    bgColor:string,
+    bgColor?:string,
     color:string,
     wBorder?:string,
     onClick?: () => void,
