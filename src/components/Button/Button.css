@@ -70,3 +70,9 @@
     height: 5px; /* Define a consistent height */
     rotate: -30deg; 
   }
+
+  .button.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
