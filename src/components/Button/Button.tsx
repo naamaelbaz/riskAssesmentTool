@@ -7,13 +7,17 @@ interface ButtonProps{
     wBorder?:string,
     onClick?: () => void,
     Icon?: React.ElementType | undefined
+    disabled?:boolean; 
 }
 
-const Button: React.FC<ButtonProps> = ({text, bgColor, color, wBorder, onClick, Icon}) =>{
+const Button: React.FC<ButtonProps> = ({text, bgColor, color, wBorder, onClick, Icon, disabled}) =>{
 
     return(
     
-        <div className={`button ${bgColor} ${color} ${wBorder}`} onClick={onClick}>
+         <div
+      className={`button ${bgColor} ${color} ${wBorder} ${disabled ? "disabled" : ""}`}
+      onClick={!disabled ? onClick : undefined} // Prevent clicks when disabled
+    >
         <div className="text-icon">
         <span className="button-text">{text}</span>
         {Icon ? <Icon  className='button-icon'/> : null }

@@ -5,6 +5,7 @@ import ArrowBackIosNewRoundedIcon from '@mui/icons-material/ArrowBackIosNewRound
 import "./MultiStepForm.css"
 import {options,questionsStorage} from "../../Schemas/step1schema.tsx"
 import Button from '../Button/Button.tsx'
+import Modal from '../Modal/Modal.tsx';
 
 interface MultiStepFormProps {
   domain: string;
@@ -21,9 +22,9 @@ const MultiStepForm: React.FC<MultiStepFormProps> = ({
   selectedAllDomainAns,
   setSelectedAllDomainAns,
 }) => {  
-  const [currentStep, setCurrentStep] = useState(0);
+  const [currentStep, setCurrentStep] = useState<number>(0);
   // console.log(domain)
-   
+  const [isSubmit,setIsSubmit] = useState<boolean>(false); 
   const fillteredDomain = questionsStorage.filter((item) => item.domain === domain);
   // Group the questions into chunks of 3
   const questionsChunks = [];
@@ -38,12 +39,15 @@ const MultiStepForm: React.FC<MultiStepFormProps> = ({
     }));
   };
 
+  const closeModal = () => {
+    setIsSubmit(false);
+  };
 
   const onSubmit = () => {
+    setIsSubmit(true); 
     setSelectedAllDomainAns((prev) => ({
       ...prev,
       [domain]: selectedAnswers, // Save answers for the current domain
-    
     }));
 
   };
@@ -60,6 +64,9 @@ const MultiStepForm: React.FC<MultiStepFormProps> = ({
     }
   };
   
+  const allQuestionsAnswered = fillteredDomain.every(
+    (question) => selectedAnswers[question.id] !== undefined && selectedAnswers[question.id] !== ""
+  );
 
   
   
@@ -80,9 +87,10 @@ const MultiStepForm: React.FC<MultiStepFormProps> = ({
         {currentStep < questionsChunks.length - 1 ? (
           <ArrowForwardIosRoundedIcon className="arrow" onClick={nextStep} />
         ) : (
-          <Button text="Submit Domain" wBorder="submit-border-color" color="black-color" onClick={onSubmit} />
+          <Button text="Save" wBorder="submit-border-color" color="black-color" onClick={onSubmit} />
         )}
       </div>
+      ({isSubmit && <Modal onClose={closeModal} message={"Your answers have been saved successfully!"}/>})
     </div>
   );
 };

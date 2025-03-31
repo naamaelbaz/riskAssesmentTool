@@ -12,6 +12,7 @@ export const FormPage = () =>{
     const [selectedAllDomainAns, setSelectedAllDomainAns] = useState<{ [domain: string]: { [key: number]: string } }>({});
     const [selectedAnswers, setSelectedAnswers] = useState<{ [key: number]: string }>({});
     
+
     interface Option{
         id: number; 
         value: string; 
@@ -19,11 +20,9 @@ export const FormPage = () =>{
     const handleSubmit = () => {
         console.log("Submit fetch", selectedAllDomainAns);
     };
-
     const handleClear = () => {
         console.log("Clear form");
     }; 
-
       const domain: Option[]=[
         {id:1, value:"Impact"},
         {id:2, value: "Capabilty"},
@@ -36,13 +35,11 @@ export const FormPage = () =>{
             ...prev,
             [selectedDomain]: selectedAnswers, 
         }));
-
         // Load new domain's answers (or empty object if none)
         setSelectedAnswers(selectedAllDomainAns[newDomain] || {});
         
         setSelectedDomain(newDomain);
     };
-
     return (
         <>
             <div className="container">
@@ -51,15 +48,12 @@ export const FormPage = () =>{
                     AML model Form
                     <div className="sub-title">Fill in the correct & accurate informtion of your model for best solution</div>
                 </div>
-
                 <div className="header">
                 
                 <div className="header-item">
                      <DropDowm options={domain} onSelect={handleDomainChange} title={"Domain"}/>
                  </div>
-
                 </div>
-
                  {selectedDomain && <MultiStepForm 
                     domain={selectedDomain}
                     selectedAnswers={selectedAnswers}
@@ -67,7 +61,6 @@ export const FormPage = () =>{
                     selectedAllDomainAns={selectedAllDomainAns}  // Pass the object
                     setSelectedAllDomainAns={setSelectedAllDomainAns}
                  /> }
-
             
                 <div className="button-container">
                     <div className="submit-clear-buttons">
@@ -77,11 +70,8 @@ export const FormPage = () =>{
                         <Button text="Clear Form" bgColor="clear-color" color="black-color" onClick={handleClear} Icon={CancelScheduleSendRoundedIcon}></Button>
                     </div>
                 </div>
-
             </div>
         </>
     )
-
 }
-
 export default FormPage; 
