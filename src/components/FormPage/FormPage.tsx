@@ -7,22 +7,32 @@ import MultiStepForm from '../MultiStepForm/MultiStepForm.tsx'
 import './FormPage.css'
 import { useState } from "react";
 import DropDowm from "../DropDown/DropDown.tsx";
+import Loader from "../Loader/Loader.tsx";
 export const FormPage = () =>{
     const [selectedDomain, setSelectedDomain] = useState<string>("Impact");
     const [selectedAllDomainAns, setSelectedAllDomainAns] = useState<{ [domain: string]: { [key: number]: string } }>({});
     const [selectedAnswers, setSelectedAnswers] = useState<{ [key: number]: string }>({});
-    
+    const [isLoading,setIsLoading] = useState<boolean>(false); 
 
     interface Option{
         id: number; 
         value: string; 
     }
-    const handleSubmit = () => {
-        console.log("Submit fetch", selectedAllDomainAns);
+    const handleSubmit = async () => {
+        setIsLoading(true); // ✅ Start loading
+    
+        // Simulate a backend request delay (e.g., 3 seconds)
+        setTimeout(() => {
+            console.log("Simulated response received:", selectedAllDomainAns);
+            setIsLoading(false); // ✅ Stop loading
+        }, 3000); // Change 3000 to adjust loading time (in milliseconds)
     };
+    
     const handleClear = () => {
-        console.log("Clear form");
-    }; 
+        setSelectedAnswers({});
+        setSelectedAllDomainAns({});
+    };
+    
       const domain: Option[]=[
         {id:1, value:"Impact"},
         {id:2, value: "Capabilty"},
@@ -69,6 +79,7 @@ export const FormPage = () =>{
                      <div className="submit-clear-buttons">
                         <Button text="Clear Form" bgColor="clear-color" color="black-color" onClick={handleClear} Icon={CancelScheduleSendRoundedIcon}></Button>
                     </div>
+                    {isLoading && <Loader />}
                 </div>
             </div>
         </>
