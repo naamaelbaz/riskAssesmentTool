@@ -1,13 +1,13 @@
 import React from "react";
-import Header from "../Header/Header.tsx";
-import Button from "../Button/Button.tsx";
+import Header from "../../components/Header/Header.tsx";
+import Button from "../../components/Button/Button.tsx";
 import SendRoundedIcon from '@mui/icons-material/SendRounded';
 import CancelScheduleSendRoundedIcon from '@mui/icons-material/CancelScheduleSendRounded';
-import MultiStepForm from '../MultiStepForm/MultiStepForm.tsx'
+import MultiStepForm from '../../components/MultiStepForm/MultiStepForm.tsx'
 import './FormPage.css'
 import { useState } from "react";
-import DropDowm from "../DropDown/DropDown.tsx";
-import Loader from "../Loader/Loader.tsx";
+import DropDowm from "../../components/DropDown/DropDown.tsx";
+import Loader from "../../components/Loader/Loader.tsx";
 export const FormPage = () =>{
     const [selectedDomain, setSelectedDomain] = useState<string>("Impact");
     const [selectedAllDomainAns, setSelectedAllDomainAns] = useState<{ [domain: string]: { [key: number]: string } }>({});

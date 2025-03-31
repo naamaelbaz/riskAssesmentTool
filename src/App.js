@@ -1,8 +1,8 @@
 
 import './App.css';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import HomePage from './components/HomePage/HomePage.tsx';
-import FormPage from './components/FormPage/FormPage.tsx';
+import HomePage from '../src/Pages/HomePage/HomePage.tsx'
+import FormPage from '../src/Pages/FormPage/FormPage.tsx';
 function App() {
   return (
     <div>  
