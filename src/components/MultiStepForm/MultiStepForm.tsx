@@ -47,7 +47,7 @@ const MultiStepForm: React.FC<MultiStepFormProps> = ({
     setIsSubmit(true); 
     setSelectedAllDomainAns((prev) => ({
       ...prev,
-      [domain]: selectedAnswers, // Save answers for the current domain
+      [domain]: selectedAnswers, 
     }));
 
   };
