@@ -8,24 +8,36 @@ import './FormPage.css'
 import { useState } from "react";
 import DropDowm from "../../components/DropDown/DropDown.tsx";
 import Loader from "../../components/Loader/Loader.tsx";
+import DashboardPage from "../DashboardPage/DashboardPage.tsx";
 export const FormPage = () =>{
     const [selectedDomain, setSelectedDomain] = useState<string>("Impact");
     const [selectedAllDomainAns, setSelectedAllDomainAns] = useState<{ [domain: string]: { [key: number]: string } }>({});
     const [selectedAnswers, setSelectedAnswers] = useState<{ [key: number]: string }>({});
     const [isLoading,setIsLoading] = useState<boolean>(false); 
+    const [resultsAvailable, setResultsAvailable] = useState<boolean>(false); 
+    const [dashboardData, setDashboardData] = useState<DashboardData | null>(null); 
 
     interface Option{
         id: number; 
         value: string; 
     }
+
+    interface DashboardData{
+        score: number;
+        riskLevel:string; 
+    }
     const handleSubmit = async () => {
-        setIsLoading(true); // ✅ Start loading
+        setIsLoading(true); // 
     
         // Simulate a backend request delay (e.g., 3 seconds)
         setTimeout(() => {
-            console.log("Simulated response received:", selectedAllDomainAns);
-            setIsLoading(false); // ✅ Stop loading
-        }, 3000); // Change 3000 to adjust loading time (in milliseconds)
+            const mockResults: DashboardData = {score: 8.95, riskLevel: "Meduim"}
+            setDashboardData(mockResults);
+            setIsLoading(false);
+            setResultsAvailable(true);
+            // console.log("Simulated response received:", selectedAllDomainAns);
+           
+        }, 3000); 
     };
     
     const handleClear = () => {
@@ -50,9 +62,14 @@ export const FormPage = () =>{
         
         setSelectedDomain(newDomain);
     };
-    return (
+        return (
         <>
-            <div className="container">
+            {isLoading ? (<Loader/> ) 
+            : resultsAvailable ? 
+                ( <DashboardPage data={dashboardData}/> ) : 
+            
+            (
+                <div className="container">
                 <Header/>
                 <div className="title">
                     AML model Form
@@ -79,9 +96,11 @@ export const FormPage = () =>{
                      <div className="submit-clear-buttons">
                         <Button text="Clear Form" bgColor="clear-color" color="black-color" onClick={handleClear} Icon={CancelScheduleSendRoundedIcon}></Button>
                     </div>
-                    {isLoading && <Loader />}
+                   
                 </div>
             </div>
+            ) }
+            
         </>
     )
 }

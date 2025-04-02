@@ -1,0 +1,191 @@
+.dash-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 100vh;
+    padding-right: 10px;
+    padding-left: 10px;
+}
+
+.attack-container{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 6px;
+   
+}
+.attack-scores{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    margin:8px;
+    gap:12px
+}
+
+.attack-res{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.62);
+    border-radius: 20px;
+    padding: 10px;
+    margin-top: 10px;
+    height: 180px;
+   
+
+}
+
+.attack-score-graph {
+    margin-top:8px;
+    position: relative;
+    width: 100%;  /* Adjust based on container size */
+    height: 100px; /* Adjust to fit inside the box */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Distribute lines evenly */
+    border-bottom: 2px solid gray; /* X-axis line */
+}
+
+.graph-line {
+    width: 100%;
+    height: 2px;
+    background-color: gray;
+}
+
+.score{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 20px; 
+    width: 100px;
+    height: 90px;
+}
+
+.score.high{
+    background-color: red;
+}
+
+.score.meduim{
+    background-color: orange;
+}
+
+.score.low{
+    background-color: #FFDCAA;
+}
+
+
+.text{
+    text-align: center;
+    font-size: medium;
+    font-family: 'Montserrat';
+    font-weight: bold;
+
+}
+
+.content{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-direction: column;
+    gap:4px
+}
+
+.cordinate {
+    width: 8px;  /* Adjust size as needed */
+    height: 8px;  
+    background-color: red;
+    border-radius: 50%;  /* Makes it a circle */
+    display: inline-block;
+    margin-right:4px ;
+    margin-left: 4px;
+}
+
+
+.sub-text{
+    text-align: center;
+    font-size: 10px;
+    font-family: 'Montserrat';
+    font-weight: bold;
+    color: black;
+   
+}
+
+.textScore{
+    color: white;
+}
+
+.modelRisk{
+    color: black;
+}
+
+.model-risk{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap:15px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.62);
+    border-radius: 20px;
+    padding: 10px;
+    height: 85px;
+}
+
+.sub-model-risk{ 
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+}
+.model-risk-categories{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap:6px;
+}
+
+.category-item{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 30px;
+    width:120px; 
+    height: 25px;
+    color: black;
+    font-size: smaller;
+    font-weight: bold;
+    font-family: 'Montserrat';
+}
+
+.inegrity{
+    background-color:#ADD8E6;
+}
+.availability{
+    background-color: #C8E6C9;
+}
+.privacy{
+    background-color: lightpink;
+}
+.attack-sub-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+}
+
+.defense-strategies-container{
+    display:flex;
+    flex-direction:column; 
+    justify-content: center;
+}
+
+.x-axis-labels {
+    display: flex;
+    justify-content: space-between; /* Evenly distribute numbers */
+    width: 100%;
+    padding-top: 5px; /* Space from the X-axis */
+}
+
+.x-axis-tick {
+    font-size: 12px;
+    color: black;
+    text-align: center;
+    width: 25px; /* Adjust based on spacing */
+}
