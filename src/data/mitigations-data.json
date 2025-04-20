@@ -1,0 +1,233 @@
+[
+  {
+    "name": "Gradient Masking",
+    "description": "Technique that hides gradients to prevent attackers from crafting adversarial examples",
+    "effectivenessScore": 7.8,
+    "resourceRequirement": "Medium",
+    "applicableAttacks": ["attack-1", "attack-3"],
+    "implementationSteps": [
+      {
+        "step": "Apply Gradient Regularization",
+        "description": "Penalize large gradients during model training to make them less useful for attackers",
+        "complexity": "Medium",
+        "effectivenessScore": 8.2
+      },
+      {
+        "step": "Implement Defensive Distillation",
+        "description": "Train a second model on the soft outputs of the original model to obfuscate gradients",
+        "complexity": "High",
+        "effectivenessScore": 7.5
+      },
+      {
+        "step": "Add Temperature Scaling",
+        "description": "Apply temperature parameter to soften probability distributions and hide gradient information",
+        "complexity": "Low",
+        "effectivenessScore": 6.8
+      },
+      {
+        "step": "Test Against Gradient-Based Attacks",
+        "description": "Validate the effectiveness by attempting gradient-based attacks against the protected model",
+        "complexity": "Medium",
+        "effectivenessScore": 8.5
+      }
+    ]
+  },
+  {
+    "name": "Feature Squeezing",
+    "description": "Reduce precision of input features to eliminate adversarial perturbations",
+    "effectivenessScore": 6.9,
+    "resourceRequirement": "Low",
+    "applicableAttacks": ["attack-1", "attack-2", "attack-4"],
+    "implementationSteps": [
+      {
+        "step": "Implement Bit Depth Reduction",
+        "description": "Reduce the color depth of input features to remove subtle adversarial changes",
+        "complexity": "Low",
+        "effectivenessScore": 6.5
+      },
+      {
+        "step": "Add Spatial Smoothing",
+        "description": "Apply median filtering or Gaussian smoothing to input data to remove adversarial noise",
+        "complexity": "Low",
+        "effectivenessScore": 7.0
+      },
+      {
+        "step": "Create Feature Squeezers Pipeline",
+        "description": "Combine multiple feature squeezing methods into a processing pipeline",
+        "complexity": "Medium",
+        "effectivenessScore": 7.5
+      },
+      {
+        "step": "Configure Detection Thresholds",
+        "description": "Set appropriate thresholds for detecting potential adversarial examples",
+        "complexity": "Medium",
+        "effectivenessScore": 6.8
+      }
+    ]
+  },
+  {
+    "name": "Randomized Smoothing",
+    "description": "Add random noise to inputs to create certified robustness against adversarial attacks",
+    "effectivenessScore": 8.3,
+    "resourceRequirement": "Medium",
+    "applicableAttacks": ["attack-2", "attack-5"],
+    "implementationSteps": [
+      {
+        "step": "Implement Noise Injection",
+        "description": "Add controlled Gaussian noise to input samples before classification",
+        "complexity": "Low",
+        "effectivenessScore": 7.8
+      },
+      {
+        "step": "Create Ensemble Prediction",
+        "description": "Aggregate predictions from multiple noisy versions of the same input",
+        "complexity": "Medium",
+        "effectivenessScore": 8.5
+      },
+      {
+        "step": "Calculate Robustness Certificate",
+        "description": "Derive provable robustness guarantees based on noise parameters",
+        "complexity": "High",
+        "effectivenessScore": 9.0
+      },
+      {
+        "step": "Optimize Noise Distribution",
+        "description": "Tune the noise parameters to balance robustness and accuracy",
+        "complexity": "Medium",
+        "effectivenessScore": 8.2
+      }
+    ]
+  },
+  {
+    "name": "Model Hardening",
+    "description": "Strengthen model against attacks through specialized training techniques",
+    "effectivenessScore": 8.5,
+    "resourceRequirement": "High",
+    "applicableAttacks": ["attack-1", "attack-3", "attack-6"],
+    "implementationSteps": [
+      {
+        "step": "Implement Adversarial Training",
+        "description": "Incorporate adversarial examples in the training process to build resistance",
+        "complexity": "High",
+        "effectivenessScore": 9.0
+      },
+      {
+        "step": "Add Robust Optimization",
+        "description": "Use min-max optimization to find parameters resilient to worst-case perturbations",
+        "complexity": "High",
+        "effectivenessScore": 8.7
+      },
+      {
+        "step": "Apply Certified Defenses",
+        "description": "Implement provable defense methods with mathematical guarantees",
+        "complexity": "High",
+        "effectivenessScore": 8.9
+      },
+      {
+        "step": "Conduct Regular Adversarial Testing",
+        "description": "Establish ongoing testing regime with state-of-the-art attack methods",
+        "complexity": "Medium",
+        "effectivenessScore": 7.5
+      }
+    ]
+  },
+  {
+    "name": "Detection & Monitoring",
+    "description": "Detect adversarial examples before they reach the model",
+    "effectivenessScore": 7.2,
+    "resourceRequirement": "Medium",
+    "applicableAttacks": ["attack-4", "attack-5", "attack-6"],
+    "implementationSteps": [
+      {
+        "step": "Build Adversarial Detector",
+        "description": "Train a separate model specifically to identify adversarial examples",
+        "complexity": "High",
+        "effectivenessScore": 7.5
+      },
+      {
+        "step": "Implement Statistical Methods",
+        "description": "Apply statistical tests to detect anomalies in input distributions",
+        "complexity": "Medium",
+        "effectivenessScore": 6.8
+      },
+      {
+        "step": "Add Input Preprocessing",
+        "description": "Create preprocessing pipeline to normalize inputs and flag suspicious patterns",
+        "complexity": "Medium",
+        "effectivenessScore": 7.0
+      },
+      {
+        "step": "Configure Real-time Alerts",
+        "description": "Set up a monitoring system that alerts when potential attacks are detected",
+        "complexity": "Low",
+        "effectivenessScore": 7.5
+      }
+    ]
+  },
+  {
+    "name": "Ensemble Defenses",
+    "description": "Combine multiple models and defense techniques for layered protection",
+    "effectivenessScore": 8.9,
+    "resourceRequirement": "High",
+    "applicableAttacks": ["attack-2", "attack-3", "attack-5", "attack-6"],
+    "implementationSteps": [
+      {
+        "step": "Train Diverse Models",
+        "description": "Create an ensemble of models with different architectures and training sets",
+        "complexity": "High",
+        "effectivenessScore": 8.7
+      },
+      {
+        "step": "Implement Voting Scheme",
+        "description": "Design robust voting mechanism to aggregate predictions from all models",
+        "complexity": "Medium",
+        "effectivenessScore": 8.5
+      },
+      {
+        "step": "Add Defense-in-Depth",
+        "description": "Layer multiple defensive techniques across the ML pipeline",
+        "complexity": "High",
+        "effectivenessScore": 9.2
+      },
+      {
+        "step": "Configure Fallback Mechanisms",
+        "description": "Implement safe fallback options when confidence is low or attacks detected",
+        "complexity": "Medium",
+        "effectivenessScore": 9.0
+      }
+    ]
+  },
+  {
+    "name": "Input Sanitization",
+    "description": "Clean and validate inputs before processing to remove potential attack vectors",
+    "effectivenessScore": 6.8,
+    "resourceRequirement": "Medium",
+    "applicableAttacks": ["attack-1", "attack-4"],
+    "implementationSteps": [
+      {
+        "step": "Implement Data Validation",
+        "description": "Create strict validation rules for all input features",
+        "complexity": "Medium",
+        "effectivenessScore": 6.5
+      },
+      {
+        "step": "Add Normalization Pipeline",
+        "description": "Standardize inputs to remove potential adversarial perturbations",
+        "complexity": "Low",
+        "effectivenessScore": 7.0
+      },
+      {
+        "step": "Create Outlier Detection",
+        "description": "Identify and flag unusual input patterns for further inspection",
+        "complexity": "Medium",
+        "effectivenessScore": 7.2
+      },
+      {
+        "step": "Configure Reject Options",
+        "description": "Define criteria for rejecting suspicious inputs rather than processing them",
+        "complexity": "Low",
+        "effectivenessScore": 6.5
+      }
+    ]
+  }
+]
