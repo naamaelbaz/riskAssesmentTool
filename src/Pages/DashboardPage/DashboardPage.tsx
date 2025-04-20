@@ -1834,8 +1834,10 @@
 import React, { useState } from "react";
 import "./DashboardPage.css";
 // Updated imports with relative paths
-import attacksData from '/Users/barel/Downloads/riskAssesmentToolUpdate/src/data/aml-attacks-data.json';
-import mitigationsData from '/Users/barel/Downloads/riskAssesmentToolUpdate/src/data/mitigations-data.json';
+// import attacksData from '/Users/barel/Downloads/riskAssesmentToolUpdate/src/data/aml-attacks-data.json';
+// import mitigationsData from '/Users/barel/Downloads/riskAssesmentToolUpdate/src/data/mitigations-data.json';
+import attacksData from '../../data/aml-attacks-data.json';
+import mitigationsData from '../../data/mitigations-data.json';
 
 // Enhanced type definitions
 interface MitigationStep {
