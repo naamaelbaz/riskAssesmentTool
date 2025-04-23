@@ -255,11 +255,22 @@ export const FormPage = () => {
         value: string;
     }
 
-    interface DashboardData {
+    // interface DashboardData {
+    //     score: number;
+    //     riskLevel: string;
+    // }
+    interface Attack {
+        attack_name: string;
+        objective: string;
         score: number;
-        riskLevel: string;
     }
-
+    
+    interface DashboardData {
+        attacks: Attack[];
+        explanations: Record<string, string>;
+        usecaseName: string;
+    }
+      
     const domain: Option[] = [
         { id: 1, value: "Impact" },
         { id: 2, value: "Capabilty" },
@@ -294,33 +305,117 @@ export const FormPage = () => {
 
         return incomplete;
     };
-
-    const handleSubmit = async () => {
+    const normalizeKey = (key: string) => {
+        return key.replace(/\s|&/g, ''); // removes spaces and ampersands
+      };
+      
+      const flattenData = (allDomainAnswers: Record<string, Record<string, string | string[]>>) => {
+        const flattened: Record<string, string | string[]> = {};
+    
+        for (const domain in allDomainAnswers) {
+            for (const questionId in allDomainAnswers[domain]) {
+                const cleanId = questionId.split('_')[1] || questionId;
+                flattened[cleanId] = allDomainAnswers[domain][questionId];
+            }
+        }
+    
+        return flattened;
+    };
+    
+    
+    
+      
+      
+     
+      
+      // Flatten the data
+      const flattenedData = flattenData(selectedAllDomainAns);
+      
+      console.log(flattenedData,"ffffff");
+      const handleSubmit = async () => {
         // Save current domain's answers before validation
         const updatedAllDomainAns = {
             ...selectedAllDomainAns,
             [selectedDomain]: selectedAnswers,
         };
-
+    
         // Check if all domains are complete
         const incomplete = validateAllDomainsComplete();
-
+    
         if (incomplete.length > 0) {
             setIncompleteFields(incomplete);
             setShowValidationPopup(true);
             return;
         }
-
-        setIsLoading(true);
-
-        // Simulate a backend request delay (e.g., 3 seconds)
-        setTimeout(() => {
-            const mockResults: DashboardData = { score: 8.95, riskLevel: "Medium" };
-            setDashboardData(mockResults);
-            setIsLoading(false);
+    
+        // Flatten data for backend
+        const flattenedData = flattenData(updatedAllDomainAns);
+    
+        // Convert to FormData for Flask to read like request.form
+        const formData = new FormData();
+        for (const key in flattenedData) {
+            const value = flattenedData[key];
+            if (Array.isArray(value)) {
+                value.forEach((v) => formData.append(key, v));
+            } else {
+                formData.append(key, value);
+            }
+        }
+    
+        try {
+            setIsLoading(true);
+    
+            const response = await fetch("http://localhost:5000/submit", {
+                method: "POST",
+                body: formData,
+            });
+    
+            if (!response.ok) {
+                throw new Error("Failed to fetch results from backend.");
+            }
+    
+            const result = await response.json();
+            console.log("Received result from backend:", result);
+    
+            const { attacks, explanations, usecase_name } = result;
+    
+            setDashboardData({
+                attacks: attacks,
+                explanations: explanations,
+                usecaseName: usecase_name,
+            });
+         
             setResultsAvailable(true);
-        }, 3000);
+        } catch (error) {
+            console.error("Submission error:", error);
+        } finally {
+            setIsLoading(false);
+        }
     };
+    
+    
+    const updateAttacksData = async (data) => {
+        try {
+            console.log("Sending data to backend:", data); // Log data before sending
+            const response = await fetch("http://localhost:5000/update-attacks-data", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(data),
+            });
+            
+            if (!response.ok) {
+                throw new Error("Failed to update attacks data");
+            }
+            const result = await response.json();
+            console.log("Backend response:", result); // Log the response
+        } catch (error) {
+            console.error("Error updating attacks data:", error);
+            throw error;
+        }
+    };
+    
 
     const handleClear = () => {
         setSelectedAnswers({});

@@ -1,27 +1,27 @@
-[
-  {
-    "attack": "Black Box Interactive Decision-Based Evasion or Misclassification Attack",
-    "objective": "Integrity",
-    "score": 7.328
-  },
-  {
-    "attack": "Black Box Transferable Evasion or Misclassification (Using Surrogate Data) Attack",
-    "objective": "Integrity",
-    "score": 6.921
-  },
-  {
-    "attack": "Black Box Transferable Evasion or Misclassification (Using Training Data) Attack",
-    "objective": "Integrity",
-    "score": 5.936
-  },
-  {
-    "attack": "Black Box Interactive Decision-Based Clean-Label Poisoning (Using Surrogate Data, Feedback During Training) Attack",
-    "objective": "Availability",
-    "score": 5.873
-  },
-  {
-    "attack": "Black Box Interactive Decision-Based Model Extraction (Using Surrogate Data) Attack",
-    "objective": "Privacy",
-    "score": 5.453
-  }
-]
+// [
+//   {
+//     "attack": "Black Box Interactive Decision-Based Evasion or Misclassification Attack",
+//     "objective": "Integrity",
+//     "score": 7.328
+//   },
+//   {
+//     "attack": "Black Box Transferable Evasion or Misclassification (Using Surrogate Data) Attack",
+//     "objective": "Integrity",
+//     "score": 6.921
+//   },
+//   {
+//     "attack": "Black Box Transferable Evasion or Misclassification (Using Training Data) Attack",
+//     "objective": "Integrity",
+//     "score": 5.936
+//   },
+//   {
+//     "attack": "Black Box Interactive Decision-Based Clean-Label Poisoning (Using Surrogate Data, Feedback During Training) Attack",
+//     "objective": "Availability",
+//     "score": 5.873
+//   },
+//   {
+//     "attack": "Black Box Interactive Decision-Based Model Extraction (Using Surrogate Data) Attack",
+//     "objective": "Privacy",
+//     "score": 5.453
+//   }
+// ]

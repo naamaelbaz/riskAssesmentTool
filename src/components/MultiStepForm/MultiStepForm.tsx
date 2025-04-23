@@ -3,7 +3,7 @@ import QuestionItem from '../QuetionItem/QuetionItem.tsx';
 import ArrowForwardIosRoundedIcon from '@mui/icons-material/ArrowForwardIosRounded';
 import ArrowBackIosNewRoundedIcon from '@mui/icons-material/ArrowBackIosNewRounded';
 import "./MultiStepForm.css"
-import {options,questionsStorage} from "../../Schemas/step1schema.tsx"
+import {options,questionsStorage,OptionQ,QuestionStorage} from "../../Schemas/step1schema.tsx"
 import Button from '../Button/Button.tsx'
 import Modal from '../Modal/Modal.tsx';
 
@@ -19,18 +19,20 @@ const MultiStepForm: React.FC<MultiStepFormProps> = ({
   domain,
   selectedAnswers,
   setSelectedAnswers,
-  selectedAllDomainAns,
   setSelectedAllDomainAns,
 }) => {  
-  const [currentStep, setCurrentStep] = useState<number>(0);
+  const [currentStep, setCurrentStep] = useState<number>(1);
   // console.log(domain)
   const [isSubmit,setIsSubmit] = useState<boolean>(false); 
   const fillteredDomain = questionsStorage.filter((item) => item.domain === domain);
+  console.log(fillteredDomain,"domfilt >>>>")
   // Group the questions into chunks of 3
   const questionsChunks = [];
   for (let i = 0; i < fillteredDomain.length; i += 3) {
-    questionsChunks.push(fillteredDomain.slice(i, i + 2));
+    questionsChunks.push(fillteredDomain.slice(i, i + 3));
+    console.log(questionsChunks,"chunck")
   }
+  console.log(fillteredDomain.map(q => ({ id: q.id, optId: q.optId })), '>>> optIds check');
 
   const handleOptionSelect = (questionId: number, value: string) => {
     setSelectedAnswers((prev) => ({
@@ -71,16 +73,23 @@ const MultiStepForm: React.FC<MultiStepFormProps> = ({
   
   
   return (
+    
     <div className="form-container">
-      {questionsChunks[currentStep]?.map((question) => (
+    {questionsChunks[currentStep]?.map((question) => {
+      console.log('Rendering Question:', question.id, 'optId:', question.optId, 'Options:', options);
+  
+      return (
         <QuestionItem
           key={question.id}
           question={question}
-          options={options[question.optId]?.value || []}
+          options={ options.find(opt => opt.id === question.optId)?.value || []}
           selectedValue={selectedAnswers[question.id] || ''}
           onSelect={handleOptionSelect}
         />
-      ))}
+      );
+    })}
+
+  
 
       <div className="nav-container">
         {currentStep > 0 && <ArrowBackIosNewRoundedIcon className="arrow" onClick={prevStep} />}

@@ -4,25 +4,24 @@ import './QuetionItem.css';
 import PsychologyAltRoundedIcon from '@mui/icons-material/PsychologyAltRounded';
 import Tooltip from '@mui/material/Tooltip';
 import {Option} from "../../Schemas/step1schema.tsx"
+import {QuestionStorage} from "../../Schemas/step1schema.tsx"
+import {options} from "../../Schemas/step1schema.tsx"
+import {OptionQ} from "../../Schemas/step1schema.tsx"
 import Button from '../Button/Button.tsx'
 
 
-interface Question {
-  id: number;
-  question: string;
-  example: string;
-}
+
 
 interface QuestionItemProps {
-  question: Question;
-  options: Option[];
+  question: QuestionStorage;
+  options: OptionQ;
   selectedValue: string;
   onSelect: (questionId: number, value: string) => void;
 }
 
 const QuestionItem: React.FC<QuestionItemProps> = ({ question, options, selectedValue,onSelect }) => {
 
- 
+  console.log(question.optId)
 
   return (
     <div className="card">

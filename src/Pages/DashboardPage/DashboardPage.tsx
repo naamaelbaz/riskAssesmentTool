@@ -2,7 +2,6 @@
 
 import React, { useState } from "react";
 import "./DashboardPage.css";
-import attacksData from '../../data/aml-attacks-data.json';
 import mitigationsData from '../../data/mitigations-data.json';
 import Header from "../../components/Header/Header.tsx";
 
@@ -25,7 +24,7 @@ interface Mitigation {
 
 // Define Interfaces
 interface AttackData {
-  attack: string;
+  attack_name: string;
   objective: string;
   score: number;
   description?: string;
@@ -35,6 +34,7 @@ interface AttackData {
 interface DashboardPageProps {
   data?: any; // Optional since we're using imported data
 }
+
 
 // Utility function to determine score color
 const getScoreColor = (score: number): string => {
@@ -103,12 +103,13 @@ const getMitigationsForAttack = (attackId: string): Mitigation[] => {
 // Define DashboardPage component
 const DashboardPage: React.FC<DashboardPageProps> = ({ data }) => {
   const [refreshing, setRefreshing] = useState(false);
-
+  console.log("data>>>>>", data)
   // Enhanced attack data with unique IDs if they don't exist
-  const attackTypes: AttackData[] = attacksData.map((attack: AttackData, index: number) => ({
+  const attackTypes: AttackData[] = (data.attacks || []).map((attack, index) => ({
     ...attack,
     attackId: attack.attackId || `attack-${index + 1}`
   }));
+  
 
   // State for selected attack and mitigation for drill-down view
   const [selectedAttack, setSelectedAttack] = useState<AttackData | null>(null);
@@ -137,6 +138,7 @@ const DashboardPage: React.FC<DashboardPageProps> = ({ data }) => {
   const privacyScore = objectiveScores.Privacy.length > 0 ?
     parseFloat((objectiveScores.Privacy.reduce((sum, a) => sum + a.score, 0) / objectiveScores.Privacy.length).toFixed(3)) : 0;
 
+    
   // Dynamic model risk items based on attack objectives
   const modelRiskItems = [
     { name: "Attack Resistance", value: Math.round(10 - overallRiskScore), critical: overallRiskScore > 7 },
@@ -193,18 +195,22 @@ const DashboardPage: React.FC<DashboardPageProps> = ({ data }) => {
   };
 
   // Calculate percentage for objective charts
-  const getObjectivePercentage = (objective: string): number => {
-    switch(objective) {
-      case "Integrity":
-        return integrityScore > 0 ? Math.round((integrityScore / 10) * 100) : 0;
-      case "Availability":
-        return availabilityScore > 0 ? Math.round((availabilityScore / 10) * 100) : 0;
-      case "Privacy":
-        return privacyScore > 0 ? Math.round((privacyScore / 10) * 100) : 0;
-      default:
-        return 0;
-    }
-  };
+  const totalAttacks = Object.values(objectiveScores).reduce(
+    (sum, list) => sum + list.length,
+    0
+  );
+  
+  const integrityPercentage = totalAttacks > 0
+    ? Math.round((objectiveScores.Integrity.length / totalAttacks) * 100)
+    : 0;
+  
+  const availabilityPercentage = totalAttacks > 0
+    ? Math.round((objectiveScores.Availability.length / totalAttacks) * 100)
+    : 0;
+  
+  const privacyPercentage = totalAttacks > 0
+    ? Math.round((objectiveScores.Privacy.length / totalAttacks) * 100)
+    : 0;
 
   // Calculate stroke-dashoffset for circular charts
   const calculateStrokeDashoffset = (percentage: number): string => {
@@ -258,7 +264,7 @@ const DashboardPage: React.FC<DashboardPageProps> = ({ data }) => {
           <button className="back-button" onClick={handleBackToOverview}>
             ← Back to Dashboard
           </button>
-          <h2>Defense Strategies for: {selectedAttack.attack}</h2>
+          <h2>Defense Strategies for: {selectedAttack.attack_name}</h2>
         </div>
 
         <div className="attack-details">
@@ -346,7 +352,7 @@ const DashboardPage: React.FC<DashboardPageProps> = ({ data }) => {
             </div>
             <div className="metric">
               <span className="label">For Attack:</span>
-              <span className="value">{selectedAttack.attack}</span>
+              <span className="value">{selectedAttack.attack_name}</span>
             </div>
             <div className="metric">
               <span className="label">Applied To:</span>
@@ -435,7 +441,15 @@ const DashboardPage: React.FC<DashboardPageProps> = ({ data }) => {
         </div>
 
         <div className="objective-panels">
-          {Object.keys(objectiveScores).map((objective) => (
+          {Object.keys(objectiveScores).map((objective) => {
+          const percentage =
+            objective === "Integrity"
+              ? integrityPercentage
+              : objective === "Availability"
+              ? availabilityPercentage
+              : privacyPercentage;
+
+          return (
             <div className="objective-panel" key={objective}>
               <div className="objective-header">
                 <div className={`objective-icon ${getIconClass(objective)}`}></div>
@@ -456,18 +470,10 @@ const DashboardPage: React.FC<DashboardPageProps> = ({ data }) => {
                     cy="50"
                     r="45"
                     fill="none"
-                    stroke={getScoreColor(
-                      objective === "Integrity"
-                        ? integrityScore
-                        : objective === "Availability"
-                        ? availabilityScore
-                        : privacyScore
-                    )}
+                    stroke={getScoreColor(percentage)}
                     strokeWidth="10"
                     strokeDasharray={2 * Math.PI * 45}
-                    strokeDashoffset={calculateStrokeDashoffset(
-                      getObjectivePercentage(objective)
-                    )}
+                    strokeDashoffset={calculateStrokeDashoffset(percentage)}
                     transform="rotate(-90 50 50)"
                   />
                   <text
@@ -478,7 +484,7 @@ const DashboardPage: React.FC<DashboardPageProps> = ({ data }) => {
                     fontSize="20"
                     fontWeight="bold"
                   >
-                    {getObjectivePercentage(objective)}%
+                    {percentage}%
                   </text>
                 </svg>
               </div>
@@ -492,7 +498,8 @@ const DashboardPage: React.FC<DashboardPageProps> = ({ data }) => {
                 </div>
               </div>
             </div>
-          ))}
+          );
+        })}
         </div>
       </div>
 
@@ -500,13 +507,14 @@ const DashboardPage: React.FC<DashboardPageProps> = ({ data }) => {
         <div className="main-panel">
           <h2>Detected Attack Vectors</h2>
           <div className="attack-list">
+        
             {attackTypes.map((attack, index) => (
               <div
                 className="attack-item"
                 key={index}
                 onClick={() => handleAttackSelect(attack)}
               >
-                <div className="attack-name">{attack.attack}</div>
+                <div className="attack-name">{attack.attack_name}</div>
                 <div className="attack-objective">{attack.objective}</div>
                 <div className={`attack-score ${getScoreColor(attack.score)}`}>
                   {attack.score.toFixed(1)}
