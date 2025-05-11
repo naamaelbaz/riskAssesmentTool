@@ -10,7 +10,7 @@ const Footer: React.FC = () =>{
         <div className="footer-container">
 
             <div id="contact-us" className="content-container">
-                <div className="title">
+                <div className="title-f">
                     Contact Us 
                 </div>
                 <div className="content">
@@ -24,21 +24,19 @@ const Footer: React.FC = () =>{
                 </div>
             </div>
             <div id="follow-us" className="content-container">
-                <div className="title">
+                <div className="title-f">
                     Follow Us
                 </div>
                 <div className="content">
                         <div className="content-item">
                             <a  className="link-visit" href="https://www.linkedin.com/in/naama-elbaz-41b720235/"  rel="noopener noreferrer">
-                                <LinkedInIcon/>
+                                <LinkedInIcon className="l-icon"/>
                             </a>
                         </div>
-                        <div className="content-item">
-                            <FacebookIcon/>
-                        </div>
+                       
                         <div className="content-item">
                             <a className="link-visit" href="https://github.com/naamaelbaz/riskAssesmentTool">
-                                <GitHubIcon/>
+                                <GitHubIcon />
                             </a>
                         </div>
 

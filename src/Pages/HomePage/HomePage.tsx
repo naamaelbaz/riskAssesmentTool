@@ -4,9 +4,10 @@ import React from "react";
 import Header from "../../components/Header/Header.tsx";
 import "./HomePage.css";
 import Button from "../../components/Button/Button.tsx";
-import homePage from "../../utils/homepage.jpeg";
+import homePage from "../../utils/HP.png";
 import Footer from "../../components/Footer/Footer.tsx";
 import { useNavigate } from 'react-router-dom';
+
 
 const HomePage: React.FC = () => {
     const navigate = useNavigate();
@@ -15,13 +16,16 @@ const HomePage: React.FC = () => {
         navigate('/form');
     };
 
+    const handleLogin = () =>{
+        navigate('/login')
+    }
     return (
         <div className="container">
             <div className="header">
                 <Header />
                 <div className="header-content">
                     <div className="header-text">
-                        <h1 className="title">Welcome To RiskAssesML</h1>
+                        <h1 className="home-title">Welcome To RiskAssesML</h1>
                         <p className="sub-title">Your go-to tool for assessing the risk of ML systems against AML threats.</p>
                     </div>
                     <div className="button-container">
@@ -39,6 +43,7 @@ const HomePage: React.FC = () => {
                                 bgColor="white"
                                 color="black-color"
                                 wBorder="red-border"
+                                onClick={handleLogin}
                             />
                         </div>
                     </div>
@@ -58,12 +63,13 @@ const HomePage: React.FC = () => {
                         </div>
                     </div>
 
-                    <div className="items center-item">
-                        <img
+                    <div className="feature-image">
+                        {/* <img
                             src={homePage}
                             alt="Risk Assessment Visualization"
                             className="feature-image"
-                        />
+                        /> */}
+                   
                     </div>
 
                     <div className="items">

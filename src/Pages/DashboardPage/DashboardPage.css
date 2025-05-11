@@ -337,6 +337,7 @@ body {
   padding: 4px 8px;
   border-radius: 4px;
   text-align: center;
+  margin:6px;
 }
 
 .attack-level.high {

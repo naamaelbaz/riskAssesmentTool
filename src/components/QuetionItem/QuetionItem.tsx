@@ -1,55 +1,49 @@
-import React, { useState } from 'react';
-import { Controller } from 'react-hook-form';
+import React from 'react';
 import './QuetionItem.css';
-import PsychologyAltRoundedIcon from '@mui/icons-material/PsychologyAltRounded';
 import Tooltip from '@mui/material/Tooltip';
-import {Option} from "../../Schemas/step1schema.tsx"
-import {QuestionStorage} from "../../Schemas/step1schema.tsx"
-import {options} from "../../Schemas/step1schema.tsx"
-import {OptionQ} from "../../Schemas/step1schema.tsx"
-import Button from '../Button/Button.tsx'
-
-
-
+import PsychologyAltRoundedIcon from '@mui/icons-material/PsychologyAltRounded';
+import DropDown from '../DropDown/DropDown.tsx';
+import { OptionQ, QuestionStorage } from '../../Schemas/step1schema.tsx';
 
 interface QuestionItemProps {
   question: QuestionStorage;
   options: OptionQ;
   selectedValue: string;
-  onSelect: (questionId: number, value: string) => void;
+  onSelect: (questionId: string, value: string[]) => void;
 }
 
-const QuestionItem: React.FC<QuestionItemProps> = ({ question, options, selectedValue,onSelect }) => {
+const QuestionItem: React.FC<QuestionItemProps> = ({ question, options, selectedValue, onSelect }) => {
 
-  console.log(question.optId)
-
+  const handleSelect = (value: string[]) => {
+    onSelect(question.id, value);
+  };
+  const filteredQuestion = () => {
+    const original = question.question;
+    
+    if (original.includes(":")) {
+      // Split once at the first colon and return the part after it (trimmed)
+      return original.split(":").slice(1).join(":").trim();
+    }
+  
+    // Return original if there's no colon
+    return original;
+  };
+  
   return (
-    <div className="card">
-      <div className="card-header">
-
-        <div className='innerQ'>
-        <Tooltip title={question.example}>
-          <div className="icon"><PsychologyAltRoundedIcon /></div>
-        </Tooltip>
-        <div className="question-title">{question.question}  </div>
-
+    <div className="question-card">
+      <div className="question-row">
+        <div className="question-cell">
+          <div className="question-icon-text">
+            <Tooltip title={question.example}>
+              <span className="icon"><PsychologyAltRoundedIcon /></span>
+            </Tooltip>
+            <span className="question-text">{filteredQuestion()}</span>
+          </div>
         </div>
-   
+        <div className="dropdown-cell">
+          <DropDown options={options} onSelect={handleSelect} title="Select option" selVal={selectedValue} multiSelect={question.multi} />
         </div>
- 
-        <div className='answer-container'>
-                  <div className='answer-item'>
-                   {options.map((option) => (
-                    <Button
-                      key={option.id} 
-                      text={option.value}
-                      bgColor={selectedValue === option.value ? "green" : "gray"}
-                      color="white-color"
-                      onClick={() => onSelect(question.id, option.value)}
-                      />
-                  ))}
-                  </div>
-            </div>
+      </div>
     </div>
   );
 };

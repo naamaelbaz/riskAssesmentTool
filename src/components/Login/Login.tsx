@@ -1,36 +1,39 @@
 import React from "react";
 import "./Login.css";
-// import "../Header/Header.css";
 import Header from "../Header/Header.tsx";
 
 const Login: React.FC = () => {
+
   return (
-    <div>
-     <Header/>
-      <main className="login-main">
-        {/* Left Section */}
-        <section className="left-section">
-         
-     
-        </section>
+    <>
+    <Header/>
+    <div className="login-wrapper">
+      
+      <div className="login-container">
+        {/* Left panel with graphic */}
+        <div className="login-left">
+          <div className="tree-container">
+            {/* <img src="" alt="Holiday Tree" className="tree-image" /> */}
+            <p className="footer-text"></p>
+          </div>
+        </div>
 
-        {/* Right Section */}
-        <section className="right-section">
-          <h2>Log in to your account</h2>
-        
-          <form className="login-form">
-          
-            <input type="text" placeholder="Your username" />
-            <input type="password" placeholder="Password" />
-            
-          
-            <button type="submit" className="btn-primary">Log in</button>
-          
+        {/* Right login form */}
+        <div className="login-right">
+          <h2>Login</h2>
+          <form className="login-form" style={{display: "flex", flexDirection: "column", alignItems: "center"}}>
+            <input type="text" placeholder="Enter your username" />
+            <input type="password" placeholder="Enter your password" />
+            <a href="#" className="forgot-password">Forgot Password?</a>
+            <button type="submit" className="btn-primary">Login to RiskAssesML</button>
           </form>
-
-        </section>
-      </main>
+          <p className="register-prompt">
+            Don't have an account? <a href="#">Register Now</a>
+          </p>
+        </div>
+      </div>
     </div>
+    </>
   );
 };
 

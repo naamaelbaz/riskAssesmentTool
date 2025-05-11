@@ -7,6 +7,7 @@ export interface OptionQ{
   [x: string]: any;
   id:number;
   value:Option[]; 
+
 }
 
 export interface QuestionStorage{
@@ -14,7 +15,9 @@ export interface QuestionStorage{
   domain: string;
   question:string;
   example: string;
-  optId:number;  
+  optId:number; 
+  multi?:boolean; 
+  
 }
 
 export const options: OptionQ[] =[
@@ -179,7 +182,7 @@ export const options: OptionQ[] =[
   { id: 46, value: "VoxCeleb1" },
   { id: 47, value: "WSJ" },
   { id: 48, value: "YOHO" }
-  ] },
+  ] , },
   { id: 19, value:[
     {id: 1, value:"Very Easy"},
     {id: 2, value:"Easy"},
@@ -255,7 +258,7 @@ export const options: OptionQ[] =[
     { id: 64, value: "WRN" },
     { id: 65, value: "X-vector" },
     { id: 66, value: "YOLO" },
-  ], }
+  ], }, 
   ]
   
 
@@ -304,6 +307,6 @@ export const questionsStorage: QuestionStorage[] = [
   { id: "21",domain:'Model Type & Risk', question: "What type of task is your model solving?\n(Indicates the primary task the model is designed for.)",example:"Task Type.",optId:13 },
   { id: "22",domain:'Model Type & Risk', question: "What type of data is your model using? (Select the type of data processed by the model.)",example:" A specific phrase in a document bypasses a text moderation model.",optId:14 },
   { id: "23",domain:'Model Type & Risk', question: "What is the domain of your use case?\n(Identify the application area your model is serving.)", example:"Usecase Domain.",optId:15 },
-  {id:"M1", domain:'Model Type & Risk', question:" Do you use known datasets to train your model? (Select all that apply.) for your convinience - the options are categorized by domains",example:'Datasets (multi-choise)',optId:18},
-  {id: "M2",domain:'Model Type & Risk', question: 'Do you use known model architectures in your system? (Select all that apply.)', example:"Architectures (multi-choice)",optId:20}
+  {id:"M1", domain:'Model Type & Risk', question:" Do you use known datasets to train your model? (Select all that apply.) for your convinience - the options are categorized by domains",example:'Datasets (multi-choise)',optId:18, multi:true},
+  {id: "M2",domain:'Model Type & Risk', question: 'Do you use known model architectures in your system? (Select all that apply.)', example:"Architectures (multi-choice)",optId:20, multi:true}
 ];
