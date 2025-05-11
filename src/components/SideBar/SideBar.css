@@ -1,0 +1,99 @@
+.sidebar-container {
+    width: 220px;
+    background: #6366f1;
+    padding: 20px 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    font-family: 'Montserrat';
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* 👈 use this instead of space-evenly */
+    height: 100vh; /* ensure full height */
+    position: fixed;
+    z-index: 1000;
+    top:0;
+    right: 0;
+  }
+  .sidebar-container.closed {
+    width: 45px;
+    overflow: hidden;
+    padding: 10px 2px; /* keeps space for the icon */
+  }
+  
+  .sidebar-header {
+    display: flex;
+    justify-content: flex-start;
+  }
+  
+  .step {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: white;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    padding: 8px 12px;
+    border-radius: 8px;
+    transition: background-color 0.2s ease, color 0.2s ease;
+    min-width: 0;
+    flex-shrink: 0;
+  }
+  .step-label{
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    flex-shrink: 0;
+  }
+  
+  .step:hover .step-label {
+    font-weight: 1000;        /* Make it semi-bold */
+    color: white;          /* Emphasize with your brand color */
+    text-decoration: double; /* Optional: add underline */
+   
+  }
+  
+  
+  .step-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .step.completed {
+    color: #6366f1;
+  }
+  
+  .step.current {
+    color: white;
+    /* background-color: #e0e7ff; */
+    font-weight: 700;
+  }
+  
+  
+  .menu-icon {
+    cursor: pointer;
+    color: white;
+    position: absolute;
+    top: 10px;
+    right: 12px;
+    z-index: 2;
+  }
+  .sidebar-content {
+    margin-top: 40px; /* leaves space for menu icon */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    gap: 12px;
+    flex-grow: 1;
+    overflow: hidden;
+  }
+  
+  
+  .sidebar-container.closed .step-label {
+    display: none;
+  }
+  
+  .sidebar-container.closed .menu-icon {
+    left: 10px;
+  }
+  

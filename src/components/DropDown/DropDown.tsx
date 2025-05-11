@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import './DropDown.css';
 import { useState } from "react";
 interface Option{
@@ -8,42 +8,88 @@ interface Option{
 }
 interface DropDownProps{
     options: Option[];
-    onSelect: (value: string) => void;
-    title:string 
+    onSelect: (value: string[]) => void;
+    title:string;
+    selVal: string | string[];
+    multiSelect?: boolean;
   }
-const DropDowm: React.FC<DropDownProps> = ({ options,onSelect, title }) =>{
+const DropDowm: React.FC<DropDownProps> = ({ options,onSelect, title,selVal,multiSelect=false }) =>{
 
  
     const [isOpen, setIsOpen] = useState(false)
-    const [selectedOption, setSelectedOption] = useState<Option | null>(null);
+    const [selectedOptions, setSelectedOptions] = useState<Option[]>([]);
+    const [searchTerm,setSearchTerm] = useState<string>('');
+    const [filteredOptions, setFilteredOp] = useState<Option[]>(options);
     const toggleDropdown = () =>{
         setIsOpen(!isOpen);
+        setSearchTerm('');
     }
 
+    useEffect(()=>{
+      const filtered = options.filter(option=>
+        option.value.toLocaleLowerCase().includes(searchTerm.toLocaleLowerCase())
+      );
+      setFilteredOp(filtered); 
+    },[searchTerm,options]);
+
     const handleOptionClick=(option: Option)=>{
-        setSelectedOption(option);
-        setIsOpen(false);
-        onSelect(option.value)
+      console.log(multiSelect, "nulti")
+      if(multiSelect){
+        const isSelected = selectedOptions.some((o)=>o.id === option.id);
+        let updatedOptions; 
+        if (isSelected){
+          updatedOptions = selectedOptions.filter((o)=>o.id!==option.id); 
+        } else{
+          updatedOptions = [...selectedOptions,option]
+        }
+        // setIsOpen(false)
+        setSelectedOptions(updatedOptions);
+        console.log(selectedOptions,"UQ>>>>>>")
+        console.log("selVal", selVal);
+        onSelect(updatedOptions.map((o)=>o.value));
+
+      }else
+        setSelectedOptions([option]);
+        onSelect([option.value])
+        setIsOpen(true);
     }
-    console.log("selected", selectedOption)
+    console.log("selected", selectedOptions)
     return (
         <div className="dropdown-container">
         <div className="dropdown-header" onClick={toggleDropdown}>
-             {selectedOption ? selectedOption.value : `${title}`}
+             <div className={selVal ? "selected-font": ''}>{ selVal ? selVal : `${title}`}</div>
             <span className={`dropdown-icon ${isOpen ? 'open' : ''}`}>▼</span>
             </div>
             <div>
             {isOpen && (
         <div className="dropdown-menu">
-          {options.map((option) => (
-            <div
-              key={option.id}
-              className="dropdown-item"
-              onClick={() => handleOptionClick(option)}
-            >
+        <input
+            type="text"
+            className="dropdown-search"
+            placeholder="Search..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+          {filteredOptions.length > 0 ? (
+            filteredOptions.map((option) => (
+              <div
+                key={option.id}
+                className="dropdown-item"
+                onClick={() => handleOptionClick(option)}
+              >
+                 {multiSelect && (
+                <input
+                  type="checkbox"
+                  checked={selectedOptions.some((o) => o.id === option.id)}
+                  readOnly
+                />
+                 )
+                 }
               {option.value} 
             </div>
-          ))}
+          ))
+          ): ( <div>No options found</div>)
+        }
         </div>
       )}
 
