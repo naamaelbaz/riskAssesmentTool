@@ -12,10 +12,10 @@ const Modal: React.FC<ModalProps> = ({ onClose, message }) => {
     <div className="modal-overlay">
       <div className="modal-content">
         <div className="close-icon">
-            <CloseIcon fontSize="small" onClick={onClose}/>
+            <CloseIcon data-testid="CloseIcon" fontSize="small" onClick={onClose}/>
         </div>
         <div className="check-icon">
-             <CheckCircleIcon fontSize="large" />
+             <CheckCircleIcon data-testid="CheckCircleIcon" fontSize="large" />
         </div>
         
         <p>{message}</p>
