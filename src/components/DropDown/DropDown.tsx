@@ -33,7 +33,7 @@ const DropDowm: React.FC<DropDownProps> = ({ options,onSelect, title,selVal,mult
     },[searchTerm,options]);
 
     const handleOptionClick=(option: Option)=>{
-      console.log(multiSelect, "nulti")
+     
       if(multiSelect){
         const isSelected = selectedOptions.some((o)=>o.id === option.id);
         let updatedOptions; 
@@ -44,8 +44,6 @@ const DropDowm: React.FC<DropDownProps> = ({ options,onSelect, title,selVal,mult
         }
         // setIsOpen(false)
         setSelectedOptions(updatedOptions);
-        console.log(selectedOptions,"UQ>>>>>>")
-        console.log("selVal", selVal);
         onSelect(updatedOptions.map((o)=>o.value));
 
       }else
@@ -53,48 +51,56 @@ const DropDowm: React.FC<DropDownProps> = ({ options,onSelect, title,selVal,mult
         onSelect([option.value])
         setIsOpen(true);
     }
-    console.log("selected", selectedOptions)
     return (
-        <div className="dropdown-container">
-        <div className="dropdown-header" onClick={toggleDropdown}>
-             <div className={selVal ? "selected-font": ''}>{ selVal ? selVal : `${title}`}</div>
-            <span className={`dropdown-icon ${isOpen ? 'open' : ''}`}>▼</span>
-            </div>
-            <div>
-            {isOpen && (
-        <div className="dropdown-menu">
-        <input
-            type="text"
-            className="dropdown-search"
-            placeholder="Search..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-          {filteredOptions.length > 0 ? (
-            filteredOptions.map((option) => (
-              <div
-                key={option.id}
-                className="dropdown-item"
-                onClick={() => handleOptionClick(option)}
-              >
-                 {multiSelect && (
-                <input
-                  type="checkbox"
-                  checked={selectedOptions.some((o) => o.id === option.id)}
-                  readOnly
-                />
-                 )
-                 }
-              {option.value} 
-            </div>
-          ))
-          ): ( <div>No options found</div>)
-        }
+      <div className="dropdown-container">
+      <div
+        className="dropdown-header"
+        data-testid="dropdown-header"
+        onClick={toggleDropdown}
+        
+      >
+        <div className={selVal ? "selected-font" : ''}>
+          {selVal ? selVal : `${title}`}
         </div>
-      )}
-
-            </div>     
+        <span className={`dropdown-icon ${isOpen ? 'open' : ''}`}>▼</span>
       </div>
+    
+      <div>
+        {isOpen && (
+          <div className="dropdown-menu">
+            <input
+              type="text"
+              className="dropdown-search"
+              placeholder="Search..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+            {filteredOptions.length > 0 ? (
+              filteredOptions.map((option) => (
+                <div
+                  key={option.id}
+                  className="dropdown-item"
+                  onClick={() => handleOptionClick(option)}
+                  data-testid={`dropdown-option-${option.value.toLowerCase()}`}
+                >
+                  {multiSelect && (
+                    <input
+                      type="checkbox"
+                      checked={selectedOptions.some((o) => o.id === option.id)}
+                      readOnly
+                    />
+                  )}
+                  {option.value}
+                </div>
+              ))
+            ) : (
+              <div>No options found</div>
+            )}
+          </div>
+        )}
+      </div>
+    </div>
+    
       
     
     )

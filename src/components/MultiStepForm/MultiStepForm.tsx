@@ -28,7 +28,6 @@ const MultiStepForm: React.FC<MultiStepFormProps> = ({
   const [currentStep, setCurrentStep] = useState<number>(0);
   const [isSubmit, setIsSubmit] = useState<boolean>(false);
  
-  console.log(selectedAllDomainAns)
   const fillteredDomain = questionsStorage.filter((item) => item.domain === domain);
   const questionsChunks = [];
   for (let i = 0; i < fillteredDomain.length; i += 1) {
@@ -143,24 +142,31 @@ const MultiStepForm: React.FC<MultiStepFormProps> = ({
           />
         ))}
       </div>
-
       <div className="nav-container">
-        {currentStep > 0 && (
-          <div className="nav-button" onClick={prevStep}>
-            <ArrowBackIosNewRoundedIcon fontSize="small" />
-          </div>
-        )}
+      {currentStep > 0 && (
+        <button
+          className="nav-button"
+          onClick={prevStep}
+          aria-label="Previous"
+        >
+          <ArrowBackIosNewRoundedIcon data-testid="backwards" fontSize="small" />
+        </button>
+      )}
 
-        {currentStep < questionsChunks.length - 1 ? (
-          <div className="nav-button" onClick={nextStep}>
-            <ArrowForwardIosRoundedIcon fontSize="small" />
-          </div>
-        ) : (
-          <button className="submit-button" onClick={onSubmit}>
-            Save
-          </button>
-        )}
-      </div>
+      {currentStep < questionsChunks.length - 1 ? (
+        <button
+          className="nav-button"
+          onClick={nextStep}
+          aria-label="Next"
+        >
+          <ArrowForwardIosRoundedIcon data-testid="forwards" fontSize="small" />
+        </button>
+      ) : (
+        <button className="submit-button" onClick={onSubmit}>
+          Save
+        </button>
+      )}
+    </div>
 
       {isSubmit && <Modal onClose={closeModal} message={"Your answers have been saved successfully!"} />}
     </div>

@@ -103,7 +103,7 @@ const getMitigationsForAttack = (attackId: string): Mitigation[] => {
 // Define DashboardPage component
 const DashboardPage: React.FC<DashboardPageProps> = ({ data }) => {
   const [refreshing, setRefreshing] = useState(false);
-  console.log("data>>>>>", data)
+ 
   // Enhanced attack data with unique IDs if they don't exist
   const attackTypes: AttackData[] = (data.attacks || []).map((attack, index) => ({
     ...attack,
@@ -332,8 +332,8 @@ const DashboardPage: React.FC<DashboardPageProps> = ({ data }) => {
         </div>
 
         <div className="implementation-summary">
-          <div className="summary-header">
-            <h3>Mitigation Summary</h3>
+          <div  className="summary-header">
+            <h3 data-testid="Mitigation">Mitigation Summary</h3>
             <div className={`effectiveness-badge ${getEffectivenessColor(selectedMitigation.effectivenessScore)}`}>
               Overall Effectiveness: {selectedMitigation.effectivenessScore.toFixed(1)}
             </div>
@@ -403,7 +403,7 @@ const DashboardPage: React.FC<DashboardPageProps> = ({ data }) => {
     <div>
         <Header></Header>
     <div className="dashboard-container">
-      <div className="dashboard-header">
+      <div data-testid="dashboard" className="dashboard-header">
         <h1>ML Security Risk Dashboard</h1>
         <button className={`refresh-button ${refreshing ? 'refreshing' : ''}`} onClick={handleRefresh}>
           {refreshing ? 'Refreshing...' : 'Refresh Data'}

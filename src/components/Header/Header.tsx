@@ -14,7 +14,7 @@ const Header: React.FC = () =>{
         <>
         <div className="logo-container">
             <div className="logo">
-                <SecurityIcon onClick={handleSecIcon} className="security-icon"></SecurityIcon>
+                <SecurityIcon data-testid="SecurityIcon" onClick={handleSecIcon} className="security-icon"></SecurityIcon>
             </div>
             <div className="logo-text">
                 RiskAssesML

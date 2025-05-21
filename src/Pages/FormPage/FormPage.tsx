@@ -104,7 +104,7 @@ export const FormPage = () => {
       // Flatten the data
       const flattenedData = flattenData(selectedAllDomainAns);
       
-      console.log(flattenedData,"ffffff");
+      
       const handleSubmit = async () => {
         // Save current domain's answers before validation
         const updatedAllDomainAns = {
