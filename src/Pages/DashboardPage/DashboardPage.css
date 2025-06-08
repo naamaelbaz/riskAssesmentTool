@@ -429,7 +429,9 @@ body {
 .risk-bar.critical {
   background-color: #f56565;
 }
-
+.risk-bar.med{
+  background-color: #f99543;
+}
 .risk-value {
   font-size: 14px;
   font-weight: 500;
