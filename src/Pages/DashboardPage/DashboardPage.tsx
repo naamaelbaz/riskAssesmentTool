@@ -1,9 +1,10 @@
 
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./DashboardPage.css";
-import mitigationsData from '../../data/mitigations-data.json';
 import Header from "../../components/Header/Header.tsx";
+import Loader from "../../components/Loader/Loader.tsx";
+import PieAnimation from "../../components/Heatmap/Heatmap.tsx"
 
 // Enhanced type definitions
 interface MitigationStep {
@@ -56,9 +57,9 @@ const getIconClass = (objective: string): string => {
 // Get artifact name based on objective
 const getArtifactName = (objective: string): string => {
   switch(objective) {
-    case "Integrity": return "Data Protection";
-    case "Availability": return "Security Shield";
-    case "Privacy": return "Data Privacy Tool";
+    case "Integrity": return "Integrity Distribution";
+    case "Availability": return "Availability Distribution";
+    case "Privacy": return "Privacy Distribution";
     default: return "Protection Tool";
   }
 };
@@ -91,14 +92,36 @@ const getEffectivenessColor = (score: number): string => {
 };
 
 // Function to get mitigations for a specific attack
-const getMitigationsForAttack = (attackId: string): Mitigation[] => {
-  // Filter mitigations that apply to this attack by checking the applicableAttacks array
-  return mitigationsData.filter(
-    (mitigation: Mitigation) =>
-      mitigation.applicableAttacks &&
-      mitigation.applicableAttacks.includes(attackId)
-  );
+interface AIMitigationResponse {
+  strategy: string;
+}
+
+const fetchMitigationsFromAI = async (riskName: string) => {
+  try {
+    const response = await fetch("http://localhost:5000/mitigation", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ risk: riskName }),
+    });
+
+    if (!response.ok) {
+      throw new Error(`Server responded with status ${response.status}`);
+    }
+
+    const data = await response.json();
+    if (data.mitigation) {
+      return data.mitigation;
+    } else {
+      throw new Error(data.error || "Invalid response from server");
+    }
+  } catch (error) {
+    console.error("Error fetching AI mitigation strategy:", error);
+    throw error;
+  }
 };
+
+
+
 
 // Define DashboardPage component
 const DashboardPage: React.FC<DashboardPageProps> = ({ data }) => {
@@ -109,13 +132,45 @@ const DashboardPage: React.FC<DashboardPageProps> = ({ data }) => {
     ...attack,
     attackId: attack.attackId || `attack-${index + 1}`
   }));
-  
 
+
+// 1. Function to infer attack type from attack name
+const inferAttackType = (attackName: string): string => {
+  const name = attackName.toLowerCase();
+
+  if (name.includes("poisoning")) return "Data Poisoning";
+  if (name.includes("evasion") || name.includes("misclassification")) return "Evasion Attack";
+  if (name.includes("reconstruction")) return "Data Reconstruction";
+  if (name.includes("integrity")) return "Integrity Attack";
+  if (name.includes("privacy")) return "Privacy Attack";
+  if (name.includes("targeted")) return "Targeted Attack";
+  if (name.includes("black box")) return "Black Box Attack";
+  if (name.includes("white box")) return "White Box Attack";
+  
+  // Add more heuristics as needed
+  
+  return "Other";
+};
+
+// 2. Create array of inferred attack types
+const inferredAttackTypes = attackTypes.map(attack => ({
+  attackId: attack.attackId,
+  attack_name: attack.attack_name,
+  attackType: inferAttackType(attack.attack_name),
+}));
+
+// 3. Count occurrences of each attack type for heatmap data
+const heatmapData = inferredAttackTypes.reduce<Record<string, number>>((acc, curr) => {
+  acc[curr.attackType] = (acc[curr.attackType] || 0) + 1;
+  return acc;
+}, {});
+  
+console.log(attackTypes,"types")
   // State for selected attack and mitigation for drill-down view
   const [selectedAttack, setSelectedAttack] = useState<AttackData | null>(null);
   const [selectedMitigation, setSelectedMitigation] = useState<Mitigation | null>(null);
   const [viewMode, setViewMode] = useState<'overview' | 'mitigations' | 'implementation'>('overview');
-
+  
   // Calculate overall risk score (average of all scores)
   const overallRiskScore = parseFloat(
     (attackTypes.reduce((sum, attack) => sum + attack.score, 0) / attackTypes.length).toFixed(3)
@@ -160,33 +215,8 @@ const DashboardPage: React.FC<DashboardPageProps> = ({ data }) => {
     }
   ];
 
-  // Risk metrics derived from attack data
-  const riskMetrics = [
-    {
-      title: "Overall Risk Score",
-      value: overallRiskScore.toFixed(2),
-      change: overallRiskScore > 6 ? "+0.3" : "-0.2",
-      up: overallRiskScore > 6
-    },
-    {
-      title: "Integrity Risk",
-      value: integrityScore.toFixed(2),
-      change: integrityScore > 6 ? "+0.4" : "-0.1",
-      up: integrityScore > 6
-    },
-    {
-      title: "Availability Risk",
-      value: availabilityScore > 0 ? availabilityScore.toFixed(2) : "N/A",
-      change: availabilityScore > 6 ? "+0.2" : "-0.3",
-      up: availabilityScore > 6
-    },
-    {
-      title: "Privacy Risk",
-      value: privacyScore > 0 ? privacyScore.toFixed(2) : "N/A",
-      change: privacyScore > 6 ? "+0.3" : "-0.2",
-      up: privacyScore > 6
-    }
-  ];
+
+
 
   // Handle refreshing data (for demo purposes)
   const handleRefresh = () => {
@@ -213,36 +243,95 @@ const DashboardPage: React.FC<DashboardPageProps> = ({ data }) => {
     : 0;
 
   // Calculate stroke-dashoffset for circular charts
-  const calculateStrokeDashoffset = (percentage: number): string => {
-    const circumference = 2 * Math.PI * 45; // 2πr where r=45
-    return String((100 - percentage) / 100 * circumference);
-  };
+  const calculateStrokeDashoffset = (percentage: number) => {
+     const radius = 45;
+     const circumference = 2 * Math.PI * radius;
+    return circumference - (percentage / 100) * circumference;
+};
+
 
   // Handle attack selection for drill-down
-  const handleAttackSelect = (attack: AttackData) => {
-    setSelectedAttack(attack);
-    setViewMode('mitigations');
+const handleAttackSelect = async (attack: AttackData) => {
+  setLoadingMit(true);
+  setSelectedAttack(attack);
+  setViewMode('mitigations');
+ 
+  try {
+    const res = await fetch('http://localhost:5000/defenses', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ risk: attack.attack_name }),
+    });
 
-    // Get mitigations for this attack using the attackId
-    const mitigationsForAttack = getMitigationsForAttack(attack.attackId || '');
-
-    // Set the first mitigation as selected if available
-    if (mitigationsForAttack.length > 0) {
-      setSelectedMitigation(mitigationsForAttack[0]);
-    } else {
-      setSelectedMitigation(null);
+    const data = await res.json();
+    console.log(data)
+    // Defensive check
+    if (!data.mitigation || !Array.isArray(data.mitigation.mitigationList)) {
+      console.error("Invalid mitigation response: ", data);
+      setLoadingMit(false);
+      return;
     }
-  };
 
+    const mitigationList = data.mitigation.mitigationList;
+
+    // Log or use each mitigation object as needed
+    console.log("Received mitigations:", mitigationList);
+
+    // Assuming you want to display all mitigations
+    setMitigations(mitigationList);  // <-- show all as cards or in a list
+    // setSelectedMitigation(mitigationList[0] || null);  // <-- show first as default
+  } catch (err) {
+    console.error("Error fetching mitigations:", err);
+  } finally {
+    setLoadingMit(false);
+  }
+};
+
+
+
+  const [MitigationStep,setMitigationSteps] = useState<string>('');
+  const [CurrentStepIndex,setCurrentStepIndex] = useState<number>(0);
   // Handle mitigation selection
-  const handleMitigationSelect = (mitigation: Mitigation) => {
-    setSelectedMitigation(mitigation);
-    setViewMode('implementation');
-  };
+  
+ const [loadingImplementation, setLoadingImplementation] = useState(false); 
+const [loadingMit, setLoadingMit] = useState(false);
+const handleMitigationSelect = async (riskName: string) => {
+      setLoadingImplementation(true); // Start loading
+
+  try {
+    const response = await fetch("http://localhost:5000/mitigation", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ risk: riskName })
+    });
+
+    const data = await response.json();
+
+    if (data.mitigation && Array.isArray(data.mitigation.implementationSteps)) {
+      const mitigation: Mitigation = {
+        ...data.mitigation,
+        applicableAttacks: [riskName]
+      };
+
+      setSelectedMitigation(mitigation);
+      setImplementation([mitigation]);
+      setViewMode('implementation'); // Show implementation view
+    } else {
+      console.error("Invalid mitigation response: ", data);
+    }
+  } catch (error) {
+    console.error("Error fetching mitigation strategy:", error);
+  } finally {
+    setLoadingImplementation(false); // End loading regardless of success/failure
+  }
+};
+
+
 
   // Return to mitigations view
   const handleBackToMitigations = () => {
     setViewMode('mitigations');
+    setSelectedMitigation(null);
   };
 
   // Return to overview
@@ -251,145 +340,185 @@ const DashboardPage: React.FC<DashboardPageProps> = ({ data }) => {
     setSelectedAttack(null);
     setSelectedMitigation(null);
   };
+const [mitigations, setMitigations] = useState<Mitigation[]>([]);
+const [implementation, setImplementation] = useState<Mitigation[]>([]);
 
-  // Render mitigation drilldown view
-  const renderMitigationView = () => {
-    if (!selectedAttack) return null;
+// Inside your component:
+const [animatedPercentage, setAnimatedPercentage] = useState<{ [key: string]: number }>({
+  Integrity: 0,
+  Availability: 0,
+  Privacy: 0
+});
 
-    const mitigations = getMitigationsForAttack(selectedAttack.attackId || '');
+useEffect(() => {
+  const timeout = setTimeout(() => {
+    setAnimatedPercentage({
+      Integrity: integrityPercentage,
+      Availability: availabilityPercentage,
+      Privacy: privacyPercentage
+    });
+  }, 300); // slight delay triggers animation
 
+  return () => clearTimeout(timeout);
+}, [integrityPercentage, availabilityPercentage, privacyPercentage]);
+
+
+const renderMitigationView = () => {
+  if (!selectedAttack) return null;
+
+  if (loadingMit) {
     return (
       <div className="mitigation-drilldown">
-        <div className="drilldown-header">
-          <button className="back-button" onClick={handleBackToOverview}>
-            ← Back to Dashboard
-          </button>
-          <h2>Defense Strategies for: {selectedAttack.attack_name}</h2>
-        </div>
-
-        <div className="attack-details">
-          <div className="attack-info">
-            <div className="attack-info-item">
-              <span className="label">Risk Score:</span>
-              <span className={`value ${getScoreColor(selectedAttack.score)}`}>{selectedAttack.score.toFixed(1)}</span>
-            </div>
-            <div className="attack-info-item">
-              <span className="label">Risk Level:</span>
-              <span className={`value ${getScoreColor(selectedAttack.score)}`}>{getRiskLevel(selectedAttack.score)}</span>
-            </div>
-            <div className="attack-info-item">
-              <span className="label">Objective:</span>
-              <span className="value">{selectedAttack.objective}</span>
-            </div>
-          </div>
-
-          {selectedAttack.description && (
-            <div className="attack-description">{selectedAttack.description}</div>
-          )}
-        </div>
-
-        <div className="mitigations-container">
-          <h3>Available Mitigations ({mitigations.length})</h3>
-          <div className="mitigations-grid">
-            {mitigations.map((mitigation, index) => (
-              <div
-                key={index}
-                className={`mitigation-card ${selectedMitigation === mitigation ? 'active' : ''}`}
-                onClick={() => handleMitigationSelect(mitigation)}
-              >
-                <div className="mitigation-header">
-                  <h4>{mitigation.name}</h4>
-                  <div className={`effectiveness-badge ${getEffectivenessColor(mitigation.effectivenessScore)}`}>
-                    Effectiveness: {mitigation.effectivenessScore.toFixed(1)}
-                  </div>
-                </div>
-                <p className="mitigation-description">{mitigation.description}</p>
-                <div className="mitigation-footer">
-                  <div className={`resource-badge resource-${mitigation.resourceRequirement.toLowerCase()}`}>
-                    Resource: {mitigation.resourceRequirement}
-                  </div>
-                  <button className="view-steps-btn">View Implementation Steps</button>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
+        <Loader />
       </div>
     );
-  };
+  }
+
+  return (
+    <div className="mitigation-drilldown">
+      <div className="drilldown-header">
+        <button className="back-button" onClick={handleBackToOverview}>
+          ← Back to Dashboard
+        </button>
+        <h2>Defense Strategies for: {selectedAttack.attack_name}</h2>
+      </div>
+
+      <div className="attack-details">
+        <div className="attack-info">
+          <div className="attack-info-item">
+            <span className="label">Risk Score:</span>
+            <span className={`value ${getScoreColor(selectedAttack.score)}`}>{selectedAttack.score.toFixed(1)}</span>
+          </div>
+          <div className="attack-info-item">
+            <span className="label">Risk Level:</span>
+            <span className={`value ${getScoreColor(selectedAttack.score)}`}>{getRiskLevel(selectedAttack.score)}</span>
+          </div>
+          <div className="attack-info-item">
+            <span className="label">Objective:</span>
+            <span className="value">{selectedAttack.objective}</span>
+          </div>
+        </div>
+
+        {selectedAttack.description && (
+          <div className="attack-description">{selectedAttack.description}</div>
+        )}
+      </div>
+
+      <div className="mitigations-container">
+        <h3>Available Mitigations ({mitigations.length})</h3>
+        <div className="mitigations-grid">
+          {mitigations.map((mitigation, index) => (
+            <div
+              key={index}
+              className={`mitigation-card ${selectedMitigation === mitigation ? 'active' : ''}`}
+              onClick={() => handleMitigationSelect(mitigation.name)}
+            >
+              <div className="mitigation-header">
+                <h4>{mitigation.name}</h4>
+                <div className={`effectiveness-badge ${getEffectivenessColor(mitigation.effectivenessScore)}`}>
+                  Effectiveness: {Number(mitigation.effectivenessScore).toFixed(1)}
+                </div>
+              </div>
+              <p className="mitigation-description">{mitigation.description}</p>
+              <div className="mitigation-footer">
+                <div className={`resource-badge resource-${mitigation.resourceRequirement.toLowerCase()}`}>
+                  Resource: {mitigation.resourceRequirement}
+                </div>
+                <button onClick={() => handleMitigationSelect(mitigation.name)} className="view-steps-btn">
+                  View Implementation Steps
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+
 
   // Render implementation steps view
   const renderImplementationView = () => {
-    if (!selectedAttack || !selectedMitigation) return null;
-
+  if (loadingImplementation) {
     return (
       <div className="implementation-drilldown">
-        <div className="drilldown-header">
-          <button className="back-button" onClick={handleBackToMitigations}>
-            ← Back to Mitigations
-          </button>
-          <h2>Implementation Steps: {selectedMitigation.name}</h2>
-        </div>
+        <Loader />
+      </div>
+    );
+  }
 
-        <div className="implementation-summary">
-          <div  className="summary-header">
-            <h3 data-testid="Mitigation">Mitigation Summary</h3>
-            <div className={`effectiveness-badge ${getEffectivenessColor(selectedMitigation.effectivenessScore)}`}>
-              Overall Effectiveness: {selectedMitigation.effectivenessScore.toFixed(1)}
-            </div>
-          </div>
-          <p className="summary-description">{selectedMitigation.description}</p>
-          <div className="summary-metrics">
-            <div className="metric">
-              <span className="label">Resource Requirement:</span>
-              <span className={`value resource-${selectedMitigation.resourceRequirement.toLowerCase()}`}>
-                {selectedMitigation.resourceRequirement}
-              </span>
-            </div>
-            <div className="metric">
-              <span className="label">Steps Count:</span>
-              <span className="value">{selectedMitigation.implementationSteps.length}</span>
-            </div>
-            <div className="metric">
-              <span className="label">For Attack:</span>
-              <span className="value">{selectedAttack.attack_name}</span>
-            </div>
-            <div className="metric">
-              <span className="label">Applied To:</span>
-              <span className="value">
-                {selectedMitigation.applicableAttacks && selectedMitigation.applicableAttacks.length > 1
-                  ? `${selectedMitigation.applicableAttacks.length} attack types`
-                  : '1 attack type'}
-              </span>
-            </div>
+  if (!selectedAttack || !selectedMitigation) return null;
+
+  return (
+    <div className="implementation-drilldown">
+      <div className="drilldown-header">
+        <button className="back-button" onClick={handleBackToMitigations}>
+          ← Back to Mitigations
+        </button>
+        <h2>Implementation Steps: {selectedMitigation.name}</h2>
+      </div>
+
+      <div className="implementation-summary">
+        <div className="summary-header">
+          <h3 data-testid="Mitigation">Mitigation Summary</h3>
+          <div className={`effectiveness-badge ${getEffectivenessColor(selectedMitigation.effectivenessScore)}`}>
+            Overall Effectiveness: {Number(selectedMitigation.effectivenessScore.toFixed(1))}
           </div>
         </div>
-
-        <div className="implementation-steps">
-          <h3>Implementation Steps</h3>
-          <div className="steps-list">
-            {selectedMitigation.implementationSteps.map((step, index) => (
-              <div key={index} className="step-item">
-                <div className="step-number">{index + 1}</div>
-                <div className="step-content">
-                  <h4 className="step-title">{step.step}</h4>
-                  <p className="step-description">{step.description}</p>
-                  <div className="step-metrics">
-                    <div className={`complexity-badge complexity-${step.complexity.toLowerCase()}`}>
-                      Complexity: {step.complexity}
-                    </div>
-                    <div className={`effectiveness-badge ${getEffectivenessColor(step.effectivenessScore)}`}>
-                      Effectiveness: {step.effectivenessScore.toFixed(1)}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            ))}
+        <p className="summary-description">{selectedMitigation.description}</p>
+        <div className="summary-metrics">
+          <div className="metric">
+            <span className="label">Resource Requirement:</span>
+            <span className={`value resource-${selectedMitigation.resourceRequirement.toLowerCase()}`}>
+              {selectedMitigation.resourceRequirement}
+            </span>
+          </div>
+          <div className="metric">
+            <span className="label">Steps Count:</span>
+            <span className="value">{selectedMitigation.implementationSteps.length}</span>
+          </div>
+          <div className="metric">
+            <span className="label">For Attack:</span>
+            <span className="value">{selectedAttack.attack_name}</span>
+          </div>
+          <div className="metric">
+            <span className="label">Applied To:</span>
+            <span className="value">
+              {selectedMitigation.applicableAttacks && selectedMitigation.applicableAttacks.length > 1
+                ? `${selectedMitigation.applicableAttacks.length} attack types`
+                : '1 attack type'}
+            </span>
           </div>
         </div>
       </div>
-    );
-  };
+
+      <div className="implementation-steps">
+        <h3>Implementation Steps</h3>
+        <div className="steps-list">
+          {selectedMitigation.implementationSteps.map((step, index) => (
+            <div key={index} className="step-item">
+              <div className="step-number">{index + 1}</div>
+              <div className="step-content">
+                <h4 className="step-title">{step.step}</h4>
+                <p className="step-description">{step.description}</p>
+                <div className="step-metrics">
+                  <div className={`complexity-badge complexity-${step.complexity.toLowerCase()}`}>
+                    Complexity: {step.complexity}
+                  </div>
+                  <div className={`effectiveness-badge ${getEffectivenessColor(step.effectivenessScore)}`}>
+                    Effectiveness: {step.effectivenessScore.toFixed(1)}
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
+
 
   // Render based on current view mode
   if (viewMode === 'mitigations') {
@@ -415,39 +544,21 @@ const DashboardPage: React.FC<DashboardPageProps> = ({ data }) => {
           <h2>Risk Summary</h2>
           <div className="risk-overview">
             <div className="risk-score">
-              <div className={`score-value ${getScoreColor(overallRiskScore)}`}>
-                {overallRiskScore.toFixed(1)}
-              </div>
-              <div className="score-label">Overall Risk</div>
+                <PieAnimation attackTypes={attackTypes}/>  
             </div>
-            <div className="risk-level">
-              <div className={`level-value ${getScoreColor(overallRiskScore)}`}>
-                {getRiskLevel(overallRiskScore)}
-              </div>
-              <div className="level-label">Risk Level</div>
-            </div>
-          </div>
-          <div className="risk-metrics">
-            {riskMetrics.map((metric, index) => (
-              <div className="metric-item" key={index}>
-                <div className="metric-title">{metric.title}</div>
-                <div className="metric-value">{metric.value}</div>
-                <div className={`metric-change ${metric.up ? 'up' : 'down'}`}>
-                  {metric.change}
-                </div>
-              </div>
-            ))}
+            
           </div>
         </div>
 
         <div className="objective-panels">
           {Object.keys(objectiveScores).map((objective) => {
-          const percentage =
-            objective === "Integrity"
-              ? integrityPercentage
-              : objective === "Availability"
-              ? availabilityPercentage
-              : privacyPercentage;
+             const percentage = animatedPercentage[objective];
+            // const percentage =
+            // objective === "Integrity"
+            //   ? integrityPercentage
+            //   : objective === "Availability"
+            //   ? availabilityPercentage
+            //   : privacyPercentage;
 
           return (
             <div className="objective-panel" key={objective}>
@@ -465,17 +576,25 @@ const DashboardPage: React.FC<DashboardPageProps> = ({ data }) => {
                     stroke="#e6e6e6"
                     strokeWidth="10"
                   />
-                  <circle
+                 <circle
                     cx="50"
                     cy="50"
                     r="45"
                     fill="none"
-                    stroke={getScoreColor(percentage)}
+                    stroke={
+                          objective === "Integrity" 
+                            ? "#a5cbf9"
+                            : objective === "Privacy"
+                            ? "#0d9488"
+                            : "#fef3c7"
+                      }
                     strokeWidth="10"
                     strokeDasharray={2 * Math.PI * 45}
                     strokeDashoffset={calculateStrokeDashoffset(percentage)}
                     transform="rotate(-90 50 50)"
+                    style={{ transition: 'stroke-dashoffset 0.6s ease' }}
                   />
+
                   <text
                     x="50"
                     y="50"
@@ -508,23 +627,28 @@ const DashboardPage: React.FC<DashboardPageProps> = ({ data }) => {
           <h2>Detected Attack Vectors</h2>
           <div className="attack-list">
         
-            {attackTypes.map((attack, index) => (
+                {attackTypes.map((attack, index) => (
+          <div
+            className="attack-item"
+            key={index}
+          
+          >
+            <div className="attack-name">{attack.attack_name}</div>
+            <div className="attack-objective">{attack.objective}</div>
+
+            {/* Risk bar here */}
+            <div className="risk-bar-container">
               <div
-                className="attack-item"
-                key={index}
-                onClick={() => handleAttackSelect(attack)}
-              >
-                <div className="attack-name">{attack.attack_name}</div>
-                <div className="attack-objective">{attack.objective}</div>
-                <div className={`attack-score ${getScoreColor(attack.score)}`}>
-                  {attack.score.toFixed(1)}
-                </div>
-                <div className={`attack-level ${getScoreColor(attack.score)}`}>
-                  {getRiskLevel(attack.score)}
-                </div>
-                <button className="attack-action">Mitigate</button>
-              </div>
-            ))}
+                className={`risk-bar ${attack.score >= 8 ? 'critical' :  attack.score>=5 ? 'med' : ''}`}
+                style={{ width: `${attack.score * 10}%` }} // because score is 0-10
+              ></div>
+            </div>
+            <div className="risk-value">{attack.score.toFixed(1)}/10</div>
+
+            <button onClick={() => handleAttackSelect(attack)} className="attack-action">Mitigate</button>
+          </div>
+             ))}
+
           </div>
         </div>
 
@@ -606,3 +730,5 @@ const DashboardPage: React.FC<DashboardPageProps> = ({ data }) => {
 };
 
 export default DashboardPage;
+
+
