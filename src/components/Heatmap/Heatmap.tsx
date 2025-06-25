@@ -45,7 +45,6 @@ export default function PieAnimation({ attackTypes }: { attackTypes: any[] }) {
 
   // Slice based on number of items to display
   const slicedData = chartData.slice(0, itemNb);
-
   return (
     <Box sx={{ width: '100%' }}>
       <PieChart
@@ -59,16 +58,9 @@ export default function PieAnimation({ attackTypes }: { attackTypes: any[] }) {
             arcLabelMinAngle: 20,
           },
         ]}
-        skipAnimation={skipAnimation}
+       
       />
-      <FormControlLabel
-        checked={skipAnimation}
-        control={
-          <Checkbox onChange={(event) => setSkipAnimation(event.target.checked)} />
-        }
-        label="skipAnimation"
-        labelPlacement="end"
-      />
+    
       <Typography id="input-item-number" gutterBottom>
         Number of attack types
       </Typography>
@@ -80,17 +72,7 @@ export default function PieAnimation({ attackTypes }: { attackTypes: any[] }) {
         max={chartData.length}
         aria-labelledby="input-item-number"
       />
-      <Typography id="input-radius" gutterBottom>
-        Radius
-      </Typography>
-      <Slider
-        value={radius}
-        onChange={(event, val) => typeof val === 'number' && setRadius(val)}
-        valueLabelDisplay="auto"
-        min={15}
-        max={100}
-        aria-labelledby="input-radius"
-      />
+
     </Box>
   );
 }

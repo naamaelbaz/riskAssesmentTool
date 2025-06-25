@@ -125,7 +125,7 @@ const fetchMitigationsFromAI = async (riskName: string) => {
 
 // Define DashboardPage component
 const DashboardPage: React.FC<DashboardPageProps> = ({ data }) => {
-  const [refreshing, setRefreshing] = useState(false);
+
  
   // Enhanced attack data with unique IDs if they don't exist
   const attackTypes: AttackData[] = (data.attacks || []).map((attack, index) => ({
@@ -218,11 +218,8 @@ console.log(attackTypes,"types")
 
 
 
-  // Handle refreshing data (for demo purposes)
-  const handleRefresh = () => {
-    setRefreshing(true);
-    setTimeout(() => setRefreshing(false), 2000);  // Simulate refreshing
-  };
+ 
+ 
 
   // Calculate percentage for objective charts
   const totalAttacks = Object.values(objectiveScores).reduce(
@@ -249,6 +246,9 @@ console.log(attackTypes,"types")
     return circumference - (percentage / 100) * circumference;
 };
 
+
+const [loadingImplementation, setLoadingImplementation] = useState(false); 
+const [loadingMit, setLoadingMit] = useState(false);
 
   // Handle attack selection for drill-down
 const handleAttackSelect = async (attack: AttackData) => {
@@ -288,15 +288,12 @@ const handleAttackSelect = async (attack: AttackData) => {
 };
 
 
-
-  const [MitigationStep,setMitigationSteps] = useState<string>('');
-  const [CurrentStepIndex,setCurrentStepIndex] = useState<number>(0);
   // Handle mitigation selection
   
- const [loadingImplementation, setLoadingImplementation] = useState(false); 
-const [loadingMit, setLoadingMit] = useState(false);
 const handleMitigationSelect = async (riskName: string) => {
-      setLoadingImplementation(true); // Start loading
+  setLoadingImplementation(true);
+  setSelectedMitigation(null);
+  setImplementation([]);
 
   try {
     const response = await fetch("http://localhost:5000/mitigation", {
@@ -315,18 +312,23 @@ const handleMitigationSelect = async (riskName: string) => {
 
       setSelectedMitigation(mitigation);
       setImplementation([mitigation]);
-      setViewMode('implementation'); // Show implementation view
+      // ❌ DO NOT SET viewMode HERE!
     } else {
       console.error("Invalid mitigation response: ", data);
     }
   } catch (error) {
     console.error("Error fetching mitigation strategy:", error);
   } finally {
-    setLoadingImplementation(false); // End loading regardless of success/failure
+    // simulate delay if needed: await new Promise((res) => setTimeout(res, 200));
+    setLoadingImplementation(false); // Trigger the transition
   }
 };
 
-
+useEffect(() => {
+  if (!loadingImplementation && selectedMitigation) {
+    setViewMode('implementation');
+  }
+}, [loadingImplementation, selectedMitigation]);
 
   // Return to mitigations view
   const handleBackToMitigations = () => {
@@ -411,7 +413,7 @@ const renderMitigationView = () => {
             <div
               key={index}
               className={`mitigation-card ${selectedMitigation === mitigation ? 'active' : ''}`}
-              onClick={() => handleMitigationSelect(mitigation.name)}
+              // onClick={() => handleMitigationSelect(mitigation.name)}
             >
               <div className="mitigation-header">
                 <h4>{mitigation.name}</h4>
@@ -440,6 +442,8 @@ const renderMitigationView = () => {
 
   // Render implementation steps view
   const renderImplementationView = () => {
+  
+    console.log(loadingImplementation, "lm")
   if (loadingImplementation) {
     return (
       <div className="implementation-drilldown">
@@ -450,6 +454,8 @@ const renderMitigationView = () => {
 
   if (!selectedAttack || !selectedMitigation) return null;
 
+
+  
   return (
     <div className="implementation-drilldown">
       <div className="drilldown-header">
@@ -534,9 +540,7 @@ const renderMitigationView = () => {
     <div className="dashboard-container">
       <div data-testid="dashboard" className="dashboard-header">
         <h1>ML Security Risk Dashboard</h1>
-        <button className={`refresh-button ${refreshing ? 'refreshing' : ''}`} onClick={handleRefresh}>
-          {refreshing ? 'Refreshing...' : 'Refresh Data'}
-        </button>
+    
       </div>
 
       <div className="dashboard-summary">
@@ -611,10 +615,7 @@ const renderMitigationView = () => {
                 <div className="objective-artifact">
                   {getArtifactName(objective)}
                 </div>
-                <div className="objective-actions">
-                  <button className="action-button">Details</button>
-                  <button className="action-button">Protect</button>
-                </div>
+            
               </div>
             </div>
           );
@@ -652,7 +653,7 @@ const renderMitigationView = () => {
           </div>
         </div>
 
-        <div className="side-panels">
+        {/* <div className="side-panels">
           <div className="side-panel">
             <h3>Model Risk Analysis</h3>
             <div className="model-risk-list">
@@ -669,9 +670,9 @@ const renderMitigationView = () => {
                 </div>
               ))}
             </div>
-          </div>
+          </div> */}
 
-          <div className="side-panel">
+          {/* <div className="side-panel">
             <h3>Defense Probabilities</h3>
             <div className="defense-list">
               {defenseProbabilities.map((defense, index) => (
@@ -721,8 +722,8 @@ const renderMitigationView = () => {
                 </div>
               ))}
             </div>
-          </div>
-        </div>
+          </div> */}
+        {/* </div> */}
       </div>
     </div>
     </div>

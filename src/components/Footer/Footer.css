@@ -1,63 +1,72 @@
 html, body {
     margin: 0;
     padding: 0;
-
-  }
-
-.footer-container{
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    background-color: #6366f1;
-    padding: 8px;
-    flex:1
 }
 
-  .content-container{
+.footer-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    background-color: #6366f1;
+    padding: 16px 24px;
+    flex-wrap: wrap;
+}
+
+.content-container {
     display: flex;
     flex-direction: column;
-    justify-content: space-around;
+    justify-content: space-between;
     align-items: flex-start;
-  }
+    margin: 8px;
+}
 
-  .title-f{
-    display:flex; 
-    flex-direction: column;
-    justify-content: flex-start;
-    font-family: 'Montserrat';
-    font-size: medium;
+.title-f {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1rem;
     font-weight: bold;
     color: white;
-  }
-
-  .sub{
-    display: flex;
-    font-family: 'Montserrat';
-    font-weight: lighter;
-    font-size: small;
-    align-items: center;
-    margin: 6px;
-    color: white;
-  }
-
-.content{
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
-    align-items: baseline;
-    width: -webkit-fill-available;
+    margin-bottom: 8px;
 }
 
-.content-item{
-    display: flex;
-    align-items: baseline;
-    cursor: pointer;
+
+.email-icons-row {
+  display: flex;
+  gap: 1rem;
 }
 
-.l-icon{
-  color: white;
+.email-icon-wrapper {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
 }
 
-.link-visit:visited{
-    color: white;
+.email-icon {
+  font-size: 1.5rem;
+  color: #444; /* adjust color */
+}
+
+.email-tooltip {
+  visibility: hidden;
+  width: max-content;
+  background-color: rgba(0, 0, 0, 0.75);
+  color: #fff;
+  text-align: center;
+  padding: 0.3rem 0.6rem;
+  border-radius: 4px;
+
+  position: absolute;
+  bottom: 125%; /* above the icon */
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  z-index: 10;
+
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.email-icon-wrapper:hover .email-tooltip,
+.email-tooltip:hover {
+  visibility: visible;
+  opacity: 1;
 }

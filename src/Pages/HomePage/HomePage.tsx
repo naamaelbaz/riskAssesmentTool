@@ -1,13 +1,10 @@
-
-
 import React from "react";
 import Header from "../../components/Header/Header.tsx";
 import "./HomePage.css";
 import Button from "../../components/Button/Button.tsx";
-import homePage from "../../utils/HP.png";
+import HomepageImage from "../../utils/homepage.jpeg";
 import Footer from "../../components/Footer/Footer.tsx";
 import { useNavigate } from 'react-router-dom';
-
 
 const HomePage: React.FC = () => {
     const navigate = useNavigate();
@@ -16,9 +13,10 @@ const HomePage: React.FC = () => {
         navigate('/form');
     };
 
-    const handleLogin = () =>{
-        navigate('/login')
-    }
+    const handleLogin = () => {
+        navigate('/login');
+    };
+
     return (
         <div className="container">
             <div className="header">
@@ -63,13 +61,12 @@ const HomePage: React.FC = () => {
                         </div>
                     </div>
 
-                    <div className="feature-image">
-                        {/* <img
-                            src={homePage}
+                    <div className="feature-image-wrapper">
+                        <img
+                            src={HomepageImage}
                             alt="Risk Assessment Visualization"
                             className="feature-image"
-                        /> */}
-                   
+                        />
                     </div>
 
                     <div className="items">
