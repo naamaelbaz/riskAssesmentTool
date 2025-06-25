@@ -22,7 +22,7 @@ const getIconByDomain = (domain: string, color: string) => {
   switch (domain) {
     case "Impact":
       return <CrisisAlertIcon data-testid="CrisisAlertIcon" style={{ color }} />;
-    case "Capability":  // FIXED typo here
+    case "Capabilty":  // FIXED typo here
       return <ConstructionIcon data-testid="ConstructionIcon" style={{ color }} />;
     case "Model Type & Risk":
       return <ModelTrainingIcon data-testid="ModelTrainingIcon" style={{ color }} />;

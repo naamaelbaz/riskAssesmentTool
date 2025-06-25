@@ -12,7 +12,7 @@ jest.mock('@mui/icons-material', () => ({
 
 const mockDomainList = [
   { id: 1, value: 'Impact' },
-  { id: 2, value: 'Capability' },
+  { id: 2, value: 'Capabilty' },
   { id: 3, value: 'Model Type & Risk' },
 ];
 

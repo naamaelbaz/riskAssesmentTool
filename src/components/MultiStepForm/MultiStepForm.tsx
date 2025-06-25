@@ -64,16 +64,32 @@ const MultiStepForm: React.FC<MultiStepFormProps> = ({
     setSelectedAnswers(newAnswers);
   
     // Only auto-move if a new value is selected and it's not the last step
-    if (
-      !existing.includes(Array.isArray(value) ? value[0] : value) &&
-      updated.length === 1 &&
-      currentStep < questionsChunks.length - 2
-    ) {
-      setTimeout(() => {
-        setCurrentStep((prevStep) => prevStep + 1);
-      }, 300);
-    }
+ if (isMultiSelect) {
+  if (
+    !existing.includes(Array.isArray(value) ? value[0] : value) &&
+    updated.length === 1 &&
+    currentStep < questionsChunks.length - 2
+  ) {
+    setTimeout(() => {
+      setCurrentStep((prev) => prev + 1);
+    }, 300);
+  }
+} else {
+  // Single-select branch
+  if (
+    !existing.includes(Array.isArray(value) ? value[0] : value) &&
+    updated.length === 1 &&
+    currentStep < questionsChunks.length - 1
+  ) {
+    setTimeout(() => {
+      setCurrentStep((prev) => prev + 1);
+    }, 300);
+  }
+}
+
   };
+
+  
   
   const closeModal = () => {
     setIsSubmit(false);
